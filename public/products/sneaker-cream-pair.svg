@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000" role="img">
+<defs>
+<radialGradient id="pad-sneaker-cream-pair" cx="50%" cy="46%" r="62%">
+<stop offset="0%" stop-color="#fbf5ee"/>
+<stop offset="100%" stop-color="#e7e1da"/>
+</radialGradient>
+<radialGradient id="sh-sneaker-cream-pair" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#CFC3B5" stop-opacity="0.55"/>
+<stop offset="100%" stop-color="#CFC3B5" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="1000" height="1000" fill="url(#pad-sneaker-cream-pair)"/>
+<ellipse cx="500" cy="826" rx="382" ry="38" fill="url(#sh-sneaker-cream-pair)"/>
+<g opacity="0.5" transform="translate(500 560) scale(0.8) translate(-500 -560) translate(96,-150)">
+<g>
+<!-- upper -->
+<path d="M110 700 C102 640 148 592 228 558 C312 520 380 486 436 448 C480 420 542 374 600 356
+C638 368 670 392 700 420 C740 398 776 382 808 392 C850 422 878 560 890 700 Z" fill="#E9DFCE"/>
+<!-- vamp shading -->
+<path d="M110 700 C102 640 148 592 228 558 C312 520 380 486 436 448 L462 486
+C400 528 322 562 240 594 C184 616 150 654 146 700 Z" fill="#d1c7b6" opacity="0.45"/>
+<!-- toe cap -->
+<path d="M110 700 C102 640 148 592 228 558 L278 626 C218 650 174 670 156 700 Z" fill="#fdf3e2"/>
+<path d="M236 552 L286 620" stroke="#bbb1a0" stroke-width="5" opacity="0.4" fill="none"/>
+<!-- heel counter -->
+<path d="M700 420 C740 398 776 382 808 392 C850 422 878 560 890 700 L812 700
+C806 590 788 480 742 430 Z" fill="#D2C2A6"/>
+<!-- side stripe -->
+<path d="M330 618 C420 600 508 560 586 508 C614 490 640 476 664 470 L676 522
+C650 530 626 544 602 560 C524 612 434 652 344 668 Z" fill="#D2C2A6" opacity="0.9"/>
+<!-- collar padding -->
+<path d="M600 356 C638 368 670 392 700 420 L672 442 C648 418 624 396 594 386 Z" fill="#fff9e8"/>
+<!-- lace panel + eyelets -->
+<path d="M436 448 C480 420 542 374 600 356 L614 400 C562 414 512 448 462 486 Z"
+fill="#dbd1c0" opacity="0.85"/>
+<g stroke="#CDBC9F" stroke-width="11" stroke-linecap="round" fill="none">
+<path d="M486 456 L556 424"/><path d="M516 486 L584 456"/><path d="M548 514 L612 488"/>
+</g>
+<g fill="#afa594" opacity="0.75">
+<circle cx="484" cy="458" r="6"/><circle cx="558" cy="422" r="6"/>
+<circle cx="514" cy="488" r="6"/><circle cx="586" cy="454" r="6"/>
+<circle cx="546" cy="516" r="6"/><circle cx="614" cy="486" r="6"/>
+</g>
+<!-- tongue -->
+<path d="M596 364 C616 372 634 384 650 398 L628 420 C614 406 600 396 582 390 Z" fill="#fffff0"/>
+<!-- sole -->
+<path d="M96 700 C96 678 118 668 150 668 L866 668 C898 668 914 680 914 702 L914 726 L96 726 Z" fill="#F6F0E4"/>
+<path d="M96 726 L914 726 L914 744 C914 762 898 772 866 772 L144 772 C112 772 96 762 96 744 Z"
+fill="#d4cec2"/>
+<path d="M120 700 L890 700" stroke="#e2dcd0" stroke-width="3" opacity="0.55" fill="none"/>
+</g>
+</g>
+<g transform="translate(500 560) scale(0.9) translate(-500 -560) translate(-52,20)">
+<g>
+<!-- upper -->
+<path d="M110 700 C102 640 148 592 228 558 C312 520 380 486 436 448 C480 420 542 374 600 356
+C638 368 670 392 700 420 C740 398 776 382 808 392 C850 422 878 560 890 700 Z" fill="#E9DFCE"/>
+<!-- vamp shading -->
+<path d="M110 700 C102 640 148 592 228 558 C312 520 380 486 436 448 L462 486
+C400 528 322 562 240 594 C184 616 150 654 146 700 Z" fill="#d1c7b6" opacity="0.45"/>
+<!-- toe cap -->
+<path d="M110 700 C102 640 148 592 228 558 L278 626 C218 650 174 670 156 700 Z" fill="#fdf3e2"/>
+<path d="M236 552 L286 620" stroke="#bbb1a0" stroke-width="5" opacity="0.4" fill="none"/>
+<!-- heel counter -->
+<path d="M700 420 C740 398 776 382 808 392 C850 422 878 560 890 700 L812 700
+C806 590 788 480 742 430 Z" fill="#D2C2A6"/>
+<!-- side stripe -->
+<path d="M330 618 C420 600 508 560 586 508 C614 490 640 476 664 470 L676 522
+C650 530 626 544 602 560 C524 612 434 652 344 668 Z" fill="#D2C2A6" opacity="0.9"/>
+<!-- collar padding -->
+<path d="M600 356 C638 368 670 392 700 420 L672 442 C648 418 624 396 594 386 Z" fill="#fff9e8"/>
+<!-- lace panel + eyelets -->
+<path d="M436 448 C480 420 542 374 600 356 L614 400 C562 414 512 448 462 486 Z"
+fill="#dbd1c0" opacity="0.85"/>
+<g stroke="#CDBC9F" stroke-width="11" stroke-linecap="round" fill="none">
+<path d="M486 456 L556 424"/><path d="M516 486 L584 456"/><path d="M548 514 L612 488"/>
+</g>
+<g fill="#afa594" opacity="0.75">
+<circle cx="484" cy="458" r="6"/><circle cx="558" cy="422" r="6"/>
+<circle cx="514" cy="488" r="6"/><circle cx="586" cy="454" r="6"/>
+<circle cx="546" cy="516" r="6"/><circle cx="614" cy="486" r="6"/>
+</g>
+<!-- tongue -->
+<path d="M596 364 C616 372 634 384 650 398 L628 420 C614 406 600 396 582 390 Z" fill="#fffff0"/>
+<!-- sole -->
+<path d="M96 700 C96 678 118 668 150 668 L866 668 C898 668 914 680 914 702 L914 726 L96 726 Z" fill="#F6F0E4"/>
+<path d="M96 726 L914 726 L914 744 C914 762 898 772 866 772 L144 772 C112 772 96 762 96 744 Z"
+fill="#d4cec2"/>
+<path d="M120 700 L890 700" stroke="#e2dcd0" stroke-width="3" opacity="0.55" fill="none"/>
+</g>
+</g>
+</svg>

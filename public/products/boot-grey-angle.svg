@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000" role="img">
+<defs>
+<radialGradient id="pad-boot-grey-angle" cx="50%" cy="46%" r="62%">
+<stop offset="0%" stop-color="#fbf5ee"/>
+<stop offset="100%" stop-color="#e7e1da"/>
+</radialGradient>
+<radialGradient id="sh-boot-grey-angle" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#CFC3B5" stop-opacity="0.55"/>
+<stop offset="100%" stop-color="#CFC3B5" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="1000" height="1000" fill="url(#pad-boot-grey-angle)"/>
+<ellipse cx="500" cy="812" rx="336" ry="38" fill="url(#sh-boot-grey-angle)"/>
+<g transform="translate(500 560) rotate(-7) scale(0.99) translate(-500 -560) translate(0,-26)">
+<g>
+<path d="M118 700 C112 642 156 596 234 566 C314 534 380 500 436 458 C482 422 512 382 528 332
+C540 294 572 276 622 276 C690 276 726 300 732 352 C742 442 752 530 764 592
+C776 648 800 678 830 692 L856 700 L856 700 Z M856 700 L118 700 Z" fill="#87837F"/>
+<path d="M528 332 C540 294 572 276 622 276 C690 276 726 300 732 352 L700 360
+C692 322 668 306 624 306 C586 306 564 320 556 348 Z" fill="#a5a19d"/>
+<path d="M118 700 C112 642 156 596 234 566 C314 534 380 500 436 458 L460 494
+C394 540 318 576 244 604 C190 624 158 660 154 700 Z" fill="#6f6b67" opacity="0.4"/>
+<path d="M118 700 C112 642 156 596 234 566 L284 634 C224 658 178 674 158 700 Z" fill="#999591"/>
+<path d="M732 352 C742 442 752 530 764 592 C776 648 800 678 830 692 L856 700 L790 700
+C766 640 748 520 740 400 Z" fill="#6A6764"/>
+<g stroke="#B8B3AD" stroke-width="10" stroke-linecap="round" fill="none" opacity="0.92">
+<path d="M552 384 L630 366"/><path d="M562 440 L640 424"/>
+<path d="M574 496 L650 482"/><path d="M588 552 L660 540"/>
+</g>
+<g fill="#534f4b" opacity="0.6">
+<circle cx="550" cy="386" r="6"/><circle cx="632" cy="364" r="6"/>
+<circle cx="560" cy="442" r="6"/><circle cx="642" cy="422" r="6"/>
+<circle cx="572" cy="498" r="6"/><circle cx="652" cy="480" r="6"/>
+</g>
+<path d="M104 700 L892 700 L892 730 C892 746 878 754 856 754 L140 754 C116 754 104 746 104 730 Z" fill="#E4E0DA"/>
+<path d="M700 754 L892 754 L892 806 C892 822 880 830 860 830 L724 830 C706 830 696 820 696 806 Z"
+fill="#cac6c0"/>
+<path d="M104 754 L700 754 L700 776 C700 790 688 798 670 798 L138 798 C116 798 104 788 104 774 Z"
+fill="#cac6c0"/>
+</g>
+</g>
+</svg>

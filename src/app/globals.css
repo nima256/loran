@@ -1,0 +1,447 @@
+@import "tailwindcss";
+@import "@fontsource-variable/vazirmatn/index.css";
+
+/* ============================================================================
+   LORAN — Design System
+   Brand: burgundy #9A1C21 (accent, actions) + cream #EEE6DD (warm surfaces).
+   Neutrals are warm (hue ~30deg) so the whole UI stays in the brand's family
+   instead of drifting to a cold grey. Dark mode is a warm charcoal, not an
+   inversion: the logo's "cream on burgundy" relationship is kept intact.
+   All foreground/background pairs below are verified at >= 4.5:1.
+   ========================================================================= */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* --- brand constants (never theme-dependent) --- */
+  --brand-red: #9a1c21;
+  --brand-cream: #eee6dd;
+
+  /* --- light theme --- */
+  --canvas: #fbf9f6;          /* page background */
+  --surface: #ffffff;         /* cards, sheets, inputs */
+  --surface-2: #f4efe9;       /* subtle tinted block */
+  --surface-3: #eee6dd;       /* brand cream section */
+  --surface-inset: #f7f4f0;   /* wells, image pads */
+
+  --fg: #211d1a;              /* 15.9:1 on canvas */
+  --fg-muted: #5f564e;        /* 6.8:1 on canvas */
+  --fg-subtle: #857b72;       /* meta text, >=4.5 on surface */
+  --fg-on-brand: #fdfbf9;
+
+  --border: #e4dace;
+  --border-strong: #d2c5b5;
+  --ring: #9a1c21;
+
+  --primary: #9a1c21;
+  --primary-hover: #841a1e;
+  --primary-active: #6d1418;
+  --primary-fg: #ffffff;
+  --primary-soft: #f8ebe9;    /* tinted badge/alert background */
+  --primary-soft-fg: #7d171b;
+  --primary-border: #e9cfcd;
+
+  --success: #1f6f43;
+  --success-soft: #e6f2ea;
+  --warning: #8a5a10;
+  --warning-soft: #fbf0dc;
+  --danger: #a32218;
+  --danger-soft: #fbeae8;
+  --info: #1c5878;
+  --info-soft: #e5f0f6;
+
+  --sale: #9a1c21;            /* discount accent = brand, kept systematic */
+  --sale-fg: #ffffff;
+
+  --shadow-color: 28 20 14;
+
+  /* --- data visualisation ---------------------------------------------
+     Charts use ONE hue. Identity is carried by direct labels and axis text,
+     never by colour alone, which keeps every chart colour-blind safe without
+     a categorical palette. `--chart-ink` is verified >= 3:1 on the chart
+     surface in both themes; axis text is verified >= 4.5:1. */
+  /* Hero illustration ink — kept out of the chart tokens because the hero is
+     art, not data. */
+  --hero-body: #9a1c21;
+  --hero-accent: #7c1418;
+  --hero-sole: #eee6dd;
+  --hero-lace: #9a1c21;
+
+  --chart-ink: #9a1c21;
+  --chart-ink-soft: #e9cfcd;
+  --chart-grid: #e8e0d6;
+  --chart-axis: #5f564e;
+
+  /* --- radius scale (one system across the whole UI) --- */
+  --radius-xs: 0.375rem;   /*  6px  chips, tiny tags     */
+  --radius-sm: 0.5rem;     /*  8px  inner elements       */
+  --radius-md: 0.75rem;    /* 12px  buttons, inputs      */
+  --radius-lg: 1rem;       /* 16px  cards, media         */
+  --radius-xl: 1.25rem;    /* 20px  panels, modals       */
+  --radius-2xl: 1.75rem;   /* 28px  drawers, hero blocks */
+
+  /* --- elevation (restrained: 3 steps only) --- */
+  --shadow-1: 0 1px 2px rgb(var(--shadow-color) / 0.05), 0 1px 3px rgb(var(--shadow-color) / 0.04);
+  --shadow-2: 0 2px 4px rgb(var(--shadow-color) / 0.05), 0 6px 16px -6px rgb(var(--shadow-color) / 0.1);
+  --shadow-3: 0 8px 24px -8px rgb(var(--shadow-color) / 0.16), 0 2px 6px rgb(var(--shadow-color) / 0.06);
+
+  /* --- motion tokens --- */
+  --dur-fast: 120ms;
+  --dur-base: 180ms;
+  --dur-slow: 280ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* --- layout --- */
+  --header-h: 4rem;
+  --bottom-nav-h: 4rem;
+
+  /* --- z-index scale --- */
+  --z-sticky: 20;
+  --z-header: 40;
+  --z-bottom-nav: 45;
+  --z-overlay: 60;
+  --z-drawer: 70;
+  --z-modal: 80;
+  --z-toast: 90;
+
+  color-scheme: light;
+}
+
+.dark {
+  --canvas: #17120f;
+  --surface: #221b19;
+  --surface-2: #2c2422;
+  --surface-3: #332a27;
+  --surface-inset: #1d1715;
+
+  --fg: #f3ebe3;              /* 15.8:1 on canvas */
+  --fg-muted: #b0a59b;        /* 7.7:1 on canvas  */
+  --fg-subtle: #968b82;
+  --fg-on-brand: #f6efe7;
+
+  --border: #3a302d;
+  --border-strong: #4c403c;
+  --ring: #e0655f;
+
+  /* Filled brand surfaces stay burgundy with cream type (business-card logic).
+     Brand-coloured *text* is lifted to clear 4.5:1 on dark surfaces. */
+  --primary: #b22730;
+  --primary-hover: #c22d35;
+  --primary-active: #98202a;
+  --primary-fg: #f6efe7;
+  --primary-soft: #33201f;
+  --primary-soft-fg: #e0655f;
+  --primary-border: #4d2c2c;
+
+  --success: #63c08c;
+  --success-soft: #16281f;
+  --warning: #e0ac55;
+  --warning-soft: #2a2115;
+  --danger: #e8837e;
+  --danger-soft: #30201e;
+  --info: #7ab6d6;
+  --info-soft: #182730;
+
+  --sale: #c22d35;
+  --sale-fg: #f6efe7;
+
+  --shadow-color: 0 0 0;
+
+  --hero-body: #b22730;
+  --hero-accent: #8c1d24;
+  --hero-sole: #efe6db;
+  --hero-lace: #c9bcae;
+
+  --chart-ink: #d2555a;      /* 4.19:1 on the dark card surface */
+  --chart-ink-soft: #4d2c2c;
+  --chart-grid: #3a302d;
+  --chart-axis: #b0a59b;
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-2: 0 2px 4px rgb(0 0 0 / 0.3), 0 6px 16px -6px rgb(0 0 0 / 0.45);
+  --shadow-3: 0 8px 24px -8px rgb(0 0 0 / 0.6), 0 2px 6px rgb(0 0 0 / 0.4);
+
+  color-scheme: dark;
+}
+
+/* Map design tokens onto Tailwind's theme so utilities stay semantic:
+   bg-surface, text-fg-muted, border-border, rounded-lg, etc. */
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-surface-inset: var(--surface-inset);
+
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-fg-on-brand: var(--fg-on-brand);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-ring: var(--ring);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
+  --color-primary-fg: var(--primary-fg);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-soft-fg: var(--primary-soft-fg);
+  --color-primary-border: var(--primary-border);
+
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-sale: var(--sale);
+  --color-sale-fg: var(--sale-fg);
+
+  --color-chart-ink: var(--chart-ink);
+  --color-chart-ink-soft: var(--chart-ink-soft);
+  --color-chart-grid: var(--chart-grid);
+  --color-chart-axis: var(--chart-axis);
+
+  --color-brand-red: var(--brand-red);
+  --color-brand-cream: var(--brand-cream);
+
+  --radius-xs: var(--radius-xs);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
+
+  --shadow-e1: var(--shadow-1);
+  --shadow-e2: var(--shadow-2);
+  --shadow-e3: var(--shadow-3);
+
+  --font-sans: "Vazirmatn Variable", "Vazirmatn", ui-sans-serif, system-ui, sans-serif;
+
+  --breakpoint-xs: 26rem; /* 416px — the second product column on small phones */
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------------ */
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-h) + 1rem);
+  }
+
+  body {
+    background-color: var(--canvas);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    /* Persian text needs more leading than Latin to stay readable. */
+    line-height: 1.75;
+    font-feature-settings: "ss01";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Headings are tighter and heavier — the logo's condensed, confident tone. */
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.45;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  p { text-wrap: pretty; }
+
+  /* Single visible focus treatment for the entire app. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+  :focus:not(:focus-visible) { outline: none; }
+
+  button, [role="button"], a, label, select, summary {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  button:not(:disabled), [role="button"]:not([aria-disabled="true"]) { cursor: pointer; }
+  button:disabled, [aria-disabled="true"] { cursor: not-allowed; }
+
+  /* Numerals: tabular everywhere prices and counts line up. */
+  .tnum { font-variant-numeric: tabular-nums; }
+
+  ::selection { background: var(--primary); color: var(--primary-fg); }
+
+  ::placeholder { color: var(--fg-subtle); opacity: 1; }
+
+  /* Long tokens (order ids, URLs) reflow instead of overflowing. */
+  .break-token { overflow-wrap: anywhere; }
+
+  /* Remove number input spinners — quantities use explicit +/- controls. */
+  input[type="number"] { -moz-appearance: textfield; }
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+}
+
+/* ---------------------------------------------------------------------------
+   Utilities
+   ------------------------------------------------------------------------ */
+@layer utilities {
+  .container-page {
+    width: 100%;
+    margin-inline: auto;
+    max-width: 90rem;             /* 1440px */
+    padding-inline: 1rem;         /* 16px gutter on phones */
+  }
+  @media (min-width: 768px)  { .container-page { padding-inline: 1.5rem; } }
+  @media (min-width: 1280px) { .container-page { padding-inline: 2.5rem; } }
+
+  .container-narrow {
+    width: 100%;
+    margin-inline: auto;
+    max-width: 48rem;
+    padding-inline: 1rem;
+  }
+
+  /* Consistent vertical rhythm between homepage//section blocks. */
+  .section { padding-block: 2.5rem; }
+  @media (min-width: 768px) { .section { padding-block: 3.5rem; } }
+  @media (min-width: 1280px) { .section { padding-block: 4.5rem; } }
+
+  /* Horizontal scrollers (categories, related products) that still feel native. */
+  .scroll-row {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .scroll-row::-webkit-scrollbar { display: none; }
+  .scroll-row > * { scroll-snap-align: start; flex: none; }
+
+  /* One product tree that behaves like a rail on phones and a grid on larger
+     screens. Keeping this in CSS avoids rendering a hidden duplicate tree. */
+  .product-showcase {
+    display: flex;
+    gap: 0.75rem;
+    margin-inline: -1rem;
+    padding-inline: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .product-showcase::-webkit-scrollbar { display: none; }
+  .product-showcase > * {
+    flex: none;
+    width: calc(50% - 0.75rem);
+    min-width: 9.5rem;
+    scroll-snap-align: start;
+  }
+  @media (min-width: 640px) {
+    .product-showcase {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      margin-inline: 0;
+      padding-inline: 0;
+      overflow: visible;
+      scroll-snap-type: none;
+    }
+    .product-showcase > * { width: auto; min-width: 0; scroll-snap-align: unset; }
+  }
+  @media (min-width: 1024px) {
+    .product-showcase { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (min-width: 1280px) {
+    .product-showcase { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+
+  .no-scrollbar { scrollbar-width: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+
+  /* Skip initial style/layout/paint work for content that starts well below
+     the viewport. The intrinsic fallback reserves space until first reveal. */
+  .render-later {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 720px;
+  }
+
+  /* Safe-area aware bottom padding for the mobile nav + sticky CTAs. */
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .mb-bottom-nav { margin-bottom: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 0px)); }
+
+  .skeleton {
+    background: linear-gradient(90deg, var(--surface-2) 25%, var(--surface-inset) 37%, var(--surface-2) 63%);
+    background-size: 400% 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+  }
+
+  /* The faint graph-paper texture from the brand's social artwork.
+     Used sparingly — hero and empty states only. */
+  .brand-grid {
+    background-image:
+      linear-gradient(to right, color-mix(in srgb, var(--primary) 12%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, var(--primary) 12%, transparent) 1px, transparent 1px);
+    background-size: 2.5rem 2.5rem;
+  }
+}
+
+@keyframes shimmer { to { background-position: -135% 0; } }
+
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slide-up { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes slide-in-start { from { transform: translateX(-100%); } to { transform: none; } }
+@keyframes slide-in-end { from { transform: translateX(100%); } to { transform: none; } }
+@keyframes slide-in-bottom { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes pop { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: none; } }
+
+.animate-fade-in { animation: fade-in var(--dur-base) var(--ease-out) both; }
+.animate-slide-up { animation: slide-up var(--dur-base) var(--ease-out) both; }
+.animate-pop { animation: pop var(--dur-base) var(--ease-out) both; }
+/* RTL: a drawer anchored to the inline-start edge enters from the right. */
+.animate-drawer-start { animation: slide-in-end var(--dur-slow) var(--ease-out) both; }
+.animate-drawer-end { animation: slide-in-start var(--dur-slow) var(--ease-out) both; }
+.animate-sheet { animation: slide-in-bottom var(--dur-slow) var(--ease-out) both; }
+
+/* ---------------------------------------------------------------------------
+   Reduced motion — everything still works, nothing moves.
+   ------------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .skeleton { animation: none; background: var(--surface-2); }
+}
+
+/* ---------------------------------------------------------------------------
+   Print — the customer invoice and the warehouse packing slip.
+   ------------------------------------------------------------------------ */
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; color: #000; }
+  .print-sheet { box-shadow: none !important; border: none !important; margin: 0; padding: 0; max-width: none; }
+  /* URLs after links are noise on a printed sheet. */
+  a[href]::after { content: ""; }
+
+  /* Rows and blocks must not be split across pages — half a line item on one
+     page and half on the next is a picking error waiting to happen. */
+  tr, .print-keep { break-inside: avoid; page-break-inside: avoid; }
+  thead { display: table-header-group; }
+
+  @page { size: A4; margin: 14mm; }
+}

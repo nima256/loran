@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000" role="img">
+<defs>
+<radialGradient id="pad-runner-black-pair" cx="50%" cy="46%" r="62%">
+<stop offset="0%" stop-color="#fbf5ee"/>
+<stop offset="100%" stop-color="#e7e1da"/>
+</radialGradient>
+<radialGradient id="sh-runner-black-pair" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#CFC3B5" stop-opacity="0.55"/>
+<stop offset="100%" stop-color="#CFC3B5" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="1000" height="1000" fill="url(#pad-runner-black-pair)"/>
+<ellipse cx="500" cy="826" rx="382" ry="38" fill="url(#sh-runner-black-pair)"/>
+<g opacity="0.5" transform="translate(500 560) scale(0.8) translate(-500 -560) translate(96,-150)">
+<g>
+<path d="M108 678 C102 616 150 570 232 538 C318 502 388 468 448 428 C494 398 556 356 614 340
+C652 354 684 380 712 410 C752 390 790 380 822 394 C860 430 886 552 894 678 Z" fill="#24242A"/>
+<path d="M108 678 C102 616 150 570 232 538 C318 502 388 468 448 428 L474 464
+C406 508 328 546 242 578 C184 600 148 634 144 678 Z" fill="#0c0c12" opacity="0.45"/>
+<path d="M108 678 C102 616 150 570 232 538 L282 606 C218 632 170 650 150 678 Z" fill="#38383e"/>
+<path d="M712 410 C752 390 790 380 822 394 C860 430 886 552 894 678 L818 678
+C812 570 792 468 750 420 Z" fill="#3C3C46"/>
+<path d="M300 612 C410 596 520 560 618 508 L646 550 C544 606 428 644 314 662 Z"
+fill="#424248" opacity="0.85"/>
+<path d="M330 592 C440 574 546 538 640 490" stroke="#3C3C46" stroke-width="14" fill="none"
+opacity="0.55" stroke-linecap="round"/>
+<g stroke="#0E0E12" stroke-width="11" stroke-linecap="round" fill="none">
+<path d="M492 444 L560 416"/><path d="M520 476 L588 448"/><path d="M550 506 L616 480"/>
+</g>
+<!-- stacked midsole -->
+<path d="M92 678 C92 652 116 640 150 640 L868 640 C902 640 918 654 918 680 L918 706 L92 706 Z" fill="#141418"/>
+<path d="M92 706 L918 706 L918 730 C918 752 900 764 866 764 L142 764 C110 764 92 752 92 730 Z"
+fill="#020206"/>
+<path d="M92 748 L918 748 L918 762 C918 778 902 786 870 786 L140 786 C108 786 92 778 92 762 Z"
+fill="#000000"/>
+<g stroke="#000002" stroke-width="4" opacity="0.55">
+<path d="M220 668 L220 742"/><path d="M330 664 L330 744"/><path d="M440 662 L440 746"/>
+<path d="M550 662 L550 746"/><path d="M660 664 L660 744"/><path d="M770 668 L770 742"/>
+</g>
+</g>
+</g>
+<g transform="translate(500 560) scale(0.9) translate(-500 -560) translate(-52,20)">
+<g>
+<path d="M108 678 C102 616 150 570 232 538 C318 502 388 468 448 428 C494 398 556 356 614 340
+C652 354 684 380 712 410 C752 390 790 380 822 394 C860 430 886 552 894 678 Z" fill="#24242A"/>
+<path d="M108 678 C102 616 150 570 232 538 C318 502 388 468 448 428 L474 464
+C406 508 328 546 242 578 C184 600 148 634 144 678 Z" fill="#0c0c12" opacity="0.45"/>
+<path d="M108 678 C102 616 150 570 232 538 L282 606 C218 632 170 650 150 678 Z" fill="#38383e"/>
+<path d="M712 410 C752 390 790 380 822 394 C860 430 886 552 894 678 L818 678
+C812 570 792 468 750 420 Z" fill="#3C3C46"/>
+<path d="M300 612 C410 596 520 560 618 508 L646 550 C544 606 428 644 314 662 Z"
+fill="#424248" opacity="0.85"/>
+<path d="M330 592 C440 574 546 538 640 490" stroke="#3C3C46" stroke-width="14" fill="none"
+opacity="0.55" stroke-linecap="round"/>
+<g stroke="#0E0E12" stroke-width="11" stroke-linecap="round" fill="none">
+<path d="M492 444 L560 416"/><path d="M520 476 L588 448"/><path d="M550 506 L616 480"/>
+</g>
+<!-- stacked midsole -->
+<path d="M92 678 C92 652 116 640 150 640 L868 640 C902 640 918 654 918 680 L918 706 L92 706 Z" fill="#141418"/>
+<path d="M92 706 L918 706 L918 730 C918 752 900 764 866 764 L142 764 C110 764 92 752 92 730 Z"
+fill="#020206"/>
+<path d="M92 748 L918 748 L918 762 C918 778 902 786 870 786 L140 786 C108 786 92 778 92 762 Z"
+fill="#000000"/>
+<g stroke="#000002" stroke-width="4" opacity="0.55">
+<path d="M220 668 L220 742"/><path d="M330 664 L330 744"/><path d="M440 662 L440 746"/>
+<path d="M550 662 L550 746"/><path d="M660 664 L660 744"/><path d="M770 668 L770 742"/>
+</g>
+</g>
+</g>
+</svg>

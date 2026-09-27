@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000" role="img">
+<defs>
+<radialGradient id="pad-sandal-grey-angle" cx="50%" cy="46%" r="62%">
+<stop offset="0%" stop-color="#fbf5ee"/>
+<stop offset="100%" stop-color="#e7e1da"/>
+</radialGradient>
+<radialGradient id="sh-sandal-grey-angle" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#CFC3B5" stop-opacity="0.55"/>
+<stop offset="100%" stop-color="#CFC3B5" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="1000" height="1000" fill="url(#pad-sandal-grey-angle)"/>
+<ellipse cx="500" cy="812" rx="336" ry="38" fill="url(#sh-sandal-grey-angle)"/>
+<g transform="translate(500 560) rotate(-7) scale(0.99) translate(-500 -560) translate(0,-26)">
+<g>
+<!-- instep strap -->
+<path d="M336 560 C404 548 470 560 532 584 C586 604 640 612 690 606 L700 656
+C636 664 572 654 512 632 C456 612 400 602 344 612 Z" fill="#87837F"/>
+<path d="M336 560 C404 548 470 560 532 584 L512 632 C456 612 400 602 344 612 Z"
+fill="#716d69" opacity="0.45"/>
+<!-- toe strap -->
+<path d="M176 648 C224 606 282 580 344 570 L352 620 C302 630 256 652 218 684 Z" fill="#6A6764"/>
+<!-- heel strap -->
+<path d="M690 606 C742 596 786 604 818 628 L792 668 C768 652 736 648 700 656 Z"
+fill="#9f9b97"/>
+<!-- buckle -->
+<rect x="600" y="600" width="46" height="22" rx="6" fill="#3e3b38" opacity="0.75"/>
+<!-- footbed -->
+<path d="M150 700 C150 678 172 666 206 666 L856 666 C892 666 910 680 910 702
+L910 716 C910 722 904 726 896 726 L164 726 C156 726 150 722 150 716 Z"
+fill="#E4E0DA"/>
+<path d="M206 690 C340 678 520 676 700 682 C780 684 846 690 896 698"
+stroke="#cac6c0" stroke-width="3" fill="none" opacity="0.7"/>
+<!-- outsole -->
+<path d="M144 726 L916 726 L916 746 C916 760 902 768 878 768 L178 768
+C156 768 144 760 144 746 Z" fill="#bebab4"/>
+</g>
+</g>
+</svg>
