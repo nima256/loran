@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { isLocalUpload } from "@/lib/media";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { toPersianDigits } from "@/lib/format";
@@ -30,7 +31,7 @@ export function CategoryGrid({
           <div className="relative aspect-[4/3] overflow-hidden bg-surface-inset">
             {category.image && (
               <Image
-                src={category.image}
+                src={category.image} unoptimized={isLocalUpload(category.image)}
                 alt=""
                 fill
                 sizes="(min-width: 1024px) 22vw, 47vw"

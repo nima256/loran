@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { isLocalUpload } from "@/lib/media";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, FileText, Printer, Truck } from "lucide-react";
@@ -127,7 +128,7 @@ export default async function AdminOrderDetailPage({
               {order.items.map((item, index) => (
                 <li key={`${item.variantId}-${index}`} className="flex gap-3 p-4">
                   <Link href={`/admin/products/${item.slug}`} className="relative size-16 shrink-0 overflow-hidden rounded-md bg-surface-inset">
-                    {item.image && <Image src={item.image} alt="" fill sizes="64px" className="object-cover" />}
+                    {item.image && <Image src={item.image} unoptimized={isLocalUpload(item.image)} alt="" fill sizes="64px" className="object-cover" />}
                   </Link>
                   <div className="min-w-0 flex-1">
                     <Link href={`/admin/products/${item.slug}`} className="line-clamp-2 text-sm font-medium text-fg hover:text-primary dark:hover:text-[color:var(--primary-soft-fg)]">

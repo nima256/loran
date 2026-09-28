@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import { isLocalUpload } from "@/lib/media";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Clock, Search, TrendingUp, X } from "lucide-react";
@@ -198,7 +199,7 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
                     )}
                   >
                     <span className="relative size-14 shrink-0 overflow-hidden rounded-md bg-surface-inset">
-                      <Image src={product.colors[0].images[0]} alt="" fill sizes="56px" className="object-cover" />
+                      <Image src={product.colors[0].images[0]} unoptimized={isLocalUpload(product.colors[0].images[0])} alt="" fill sizes="56px" className="object-cover" />
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-sm font-medium text-fg">{product.name}</span>

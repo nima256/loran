@@ -2,6 +2,7 @@
 
 import { use, useEffect, useState } from "react";
 import Image from "next/image";
+import { isLocalUpload } from "@/lib/media";
 import Link from "next/link";
 import {
   ArrowRight, Copy, FileText, Headphones, MapPin, MessageSquare, Package, RotateCcw, Truck,
@@ -208,7 +209,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ number: 
             {order.items.map((item, index) => (
               <li key={`${item.variantId}-${index}`} className="flex gap-3 p-4">
                 <Link href={`/product/${item.slug}`} className="relative size-20 shrink-0 overflow-hidden rounded-md bg-surface-inset">
-                  <Image src={item.image} alt={item.name} fill sizes="80px" className="object-cover" />
+                  <Image src={item.image} unoptimized={isLocalUpload(item.image)} alt={item.name} fill sizes="80px" className="object-cover" />
                 </Link>
                 <div className="min-w-0 flex-1">
                   <Link href={`/product/${item.slug}`} className="line-clamp-2 text-sm font-medium text-fg hover:text-primary dark:hover:text-[color:var(--primary-soft-fg)]">

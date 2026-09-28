@@ -92,20 +92,27 @@ export async function uploadImage(file: File, folder = "products"): Promise<Uplo
 
   const directory = path.join(process.cwd(), env.UPLOAD_DIR, safeFolder);
   await mkdir(directory, { recursive: true });
-  await writeFile(path.join(directory, filename), output.data);
+  const filePath = path.join(directory, filename);
+  await writeFile(filePath, output.data, { flag: "wx" });
 
   const url = `${env.UPLOAD_PUBLIC_PREFIX}/${key}`;
 
-  await prisma.mediaAsset.create({
-    data: {
-      url,
-      key,
-      mimeType: "image/webp",
-      width: output.info.width,
-      height: output.info.height,
-      bytes: output.info.size,
-    },
-  });
+  try {
+    await prisma.mediaAsset.create({
+      data: {
+        url,
+        key,
+        mimeType: "image/webp",
+        width: output.info.width,
+        height: output.info.height,
+        bytes: output.info.size,
+      },
+    });
+  } catch (error) {
+    // Never leave an orphaned file if recording its URL failed.
+    await unlink(filePath).catch(() => undefined);
+    throw error;
+  }
 
   logger.info("تصویر آپلود شد", { key, bytes: output.info.size });
 

@@ -12,14 +12,15 @@ export function Stars({ value, size = "md", className }: { value: number; size?:
   const sizes = { sm: "size-3.5", md: "size-4", lg: "size-5" };
   const percent = Math.max(0, Math.min(100, (value / 5) * 100));
   return (
-    <span className={cn("relative inline-flex shrink-0", className)} aria-hidden>
-      <span className="flex gap-0.5 text-border-strong">
-        {[0, 1, 2, 3, 4].map((i) => <Star key={i} className={cn(sizes[size], "fill-current")} />)}
+    <span className={cn("relative inline-flex shrink-0", className)} dir="rtl" aria-hidden>
+      {/* Both rows must retain the same intrinsic width. A clipped flex row
+          would otherwise shrink its five stars to the width of the overlay. */}
+      <span className="flex w-max gap-0.5 text-border-strong">
+        {[0, 1, 2, 3, 4].map((i) => <Star key={i} className={cn(sizes[size], "shrink-0 fill-current")} />)}
       </span>
-      {/* RTL: the filled overlay is clipped from the inline-start (right) edge. */}
       <span className="absolute inset-y-0 start-0 overflow-hidden" style={{ width: `${percent}%` }}>
-        <span className="flex gap-0.5 text-[#D9A441]">
-          {[0, 1, 2, 3, 4].map((i) => <Star key={i} className={cn(sizes[size], "fill-current")} />)}
+        <span className="flex w-max gap-0.5 text-[#D9A441]">
+          {[0, 1, 2, 3, 4].map((i) => <Star key={i} className={cn(sizes[size], "shrink-0 fill-current")} />)}
         </span>
       </span>
     </span>

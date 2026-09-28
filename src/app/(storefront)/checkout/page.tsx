@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import { isLocalUpload } from "@/lib/media";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -343,7 +344,7 @@ export default function CheckoutPage() {
                   {items.map((item) => (
                     <li key={item.variantId} className="flex gap-3 p-4">
                       <span className="relative size-16 shrink-0 overflow-hidden rounded-md bg-surface-inset">
-                        <Image src={item.image} alt="" fill sizes="64px" className="object-cover" />
+                        <Image src={item.image} unoptimized={isLocalUpload(item.image)} alt="" fill sizes="64px" className="object-cover" />
                       </span>
                       <div className="min-w-0 flex-1">
                         <p className="line-clamp-2 text-sm font-medium text-fg">{item.name}</p>

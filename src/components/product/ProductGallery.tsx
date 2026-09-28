@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { isLocalUpload } from "@/lib/media";
 import { ChevronLeft, ChevronRight, Expand, X } from "lucide-react";
 import { toPersianDigits } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -67,7 +68,7 @@ export function ProductGallery({
                 i === index ? "border-primary" : "border-border hover:border-border-strong"
               )}
             >
-              <Image src={src} alt="" fill sizes="80px" className="object-cover" />
+              <Image src={src} unoptimized={isLocalUpload(src)} alt="" fill sizes="80px" className="object-cover" />
             </button>
           ))}
         </div>
@@ -76,7 +77,7 @@ export function ProductGallery({
           <div className="relative aspect-square overflow-hidden rounded-lg border border-border bg-surface-inset">
             <Image
               key={images[index]}
-              src={images[index]}
+              src={images[index]} unoptimized={isLocalUpload(images[index])}
               alt={`${alt} — تصویر ${toPersianDigits(index + 1)} از ${toPersianDigits(images.length)}`}
               fill
               priority
@@ -136,7 +137,7 @@ export function ProductGallery({
             <X className="size-6" aria-hidden />
           </button>
           <div className="relative aspect-square w-full max-w-2xl" onClick={(e) => e.stopPropagation()}>
-            <Image src={images[index]} alt={alt} fill sizes="90vw" className="rounded-lg object-contain" />
+            <Image src={images[index]} unoptimized={isLocalUpload(images[index])} alt={alt} fill sizes="90vw" className="rounded-lg object-contain" />
           </div>
           {images.length > 1 && (
             <div className="absolute bottom-6 flex gap-2" onClick={(e) => e.stopPropagation()}>

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { isLocalUpload } from "@/lib/media";
 import { Check, Plus, Search, ShoppingCart, Trash2 } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
@@ -260,7 +261,7 @@ export function ManualOrderForm({ shippingMethods }: { shippingMethods: Shipping
                         >
                           <span className="relative size-12 shrink-0 overflow-hidden rounded-md bg-surface-inset">
                             {product.image && (
-                              <Image src={product.image} alt="" fill sizes="48px" className="object-cover" />
+                              <Image src={product.image} unoptimized={isLocalUpload(product.image)} alt="" fill sizes="48px" className="object-cover" />
                             )}
                           </span>
                           <span className="min-w-0 flex-1">
@@ -336,7 +337,7 @@ export function ManualOrderForm({ shippingMethods }: { shippingMethods: Shipping
                 {lines.map((line) => (
                   <li key={line.variantId} className="flex flex-wrap items-center gap-3 p-3">
                     <span className="relative size-12 shrink-0 overflow-hidden rounded-md bg-surface-inset">
-                      {line.image && <Image src={line.image} alt="" fill sizes="48px" className="object-cover" />}
+                      {line.image && <Image src={line.image} unoptimized={isLocalUpload(line.image)} alt="" fill sizes="48px" className="object-cover" />}
                     </span>
                     <div className="min-w-0 flex-1">
                       <p className="line-clamp-1 text-sm font-medium text-fg">{line.productName}</p>

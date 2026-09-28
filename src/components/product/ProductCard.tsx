@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { isLocalUpload } from "@/lib/media";
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { Price } from "@/components/ui/Price";
@@ -55,7 +56,7 @@ export function ProductCard({
     >
       <div className="relative aspect-square overflow-hidden bg-surface-inset">
         <Image
-          src={color.images[0]}
+          src={color.images[0]} unoptimized={isLocalUpload(color.images[0])}
           alt={`${product.name} — رنگ ${color.name}`}
           fill
           sizes={sizes}
@@ -64,7 +65,7 @@ export function ProductCard({
         />
         {color.images[1] && showAlternate && (
           <Image
-            src={color.images[1]}
+            src={color.images[1]} unoptimized={isLocalUpload(color.images[1])}
             alt=""
             fill
             sizes={sizes}

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { isLocalUpload } from "@/lib/media";
 import Link from "next/link";
 import { Star } from "lucide-react";
 import { Card } from "@/components/ui/Card";
@@ -121,7 +122,7 @@ export default function MyReviewsPage() {
               <li key={`${item.orderNumber}-${item.productId}`}>
                 <Card className="flex flex-wrap items-center gap-4">
                   <Link href={`/product/${item.slug}`} className="relative size-16 shrink-0 overflow-hidden rounded-md bg-surface-inset">
-                    <Image src={item.image} alt={item.name} fill sizes="64px" className="object-cover" />
+                    <Image src={item.image} unoptimized={isLocalUpload(item.image)} alt={item.name} fill sizes="64px" className="object-cover" />
                   </Link>
                   <div className="min-w-0 flex-1">
                     <Link href={`/product/${item.slug}`} className="line-clamp-1 text-sm font-medium text-fg hover:text-primary dark:hover:text-[color:var(--primary-soft-fg)]">

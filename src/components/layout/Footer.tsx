@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Instagram, MapPin, Phone, Send } from "lucide-react";
+import { Instagram, MapPin, Phone } from "lucide-react";
 import { Logo } from "./Logo";
 import { NewsletterForm } from "./Newsletter";
 import { footerNav } from "@/lib/navigation";
@@ -9,8 +9,16 @@ import { toPersianDigits } from "@/lib/format";
 const SOCIAL_ICONS: Record<string, typeof Instagram> = {
   instagram: Instagram,
   instagram2: Instagram,
-  telegram: Send,
 };
+
+/** Brand-accurate Telegram paper plane; no third-party icon package. */
+function TelegramIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+      <path d="M22.24 2.77c.4-.16.83.16.74.6l-3.7 17.49c-.08.38-.52.54-.82.31l-5.65-4.16-2.88 2.78c-.26.25-.7.06-.7-.3v-3.85l10.2-9.2c.2-.18-.04-.46-.26-.31L6.55 14.18l-5.12-1.62c-.47-.15-.49-.8-.02-.99L22.24 2.77z" />
+    </svg>
+  );
+}
 
 export function Footer() {
   const year = new Intl.DateTimeFormat("fa-IR", { year: "numeric" }).format(new Date());
@@ -78,20 +86,31 @@ export function Footer() {
               <p className="text-sm font-medium text-fg">ما را دنبال کنید</p>
               <div className="mt-1 flex flex-wrap gap-2">
                 {siteConfig.social
-                  .filter((s) => s.url)
+                  .filter((social) => social.url || social.id === "telegram")
                   .map((social) => {
-                    const Icon = SOCIAL_ICONS[social.id] ?? Instagram;
-                    return (
+                    const Icon = social.id === "telegram" ? TelegramIcon : SOCIAL_ICONS[social.id] ?? Instagram;
+                    const icon = <Icon className="size-4" aria-hidden />;
+                    const style = "grid size-10 place-items-center rounded-md border border-border bg-surface text-fg-muted transition-colors hover:border-primary hover:text-primary dark:hover:text-[color:var(--primary-soft-fg)]";
+                    return social.url ? (
                       <a
                         key={social.id}
                         href={social.url}
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={`${social.label} لوران ${social.handle}`}
-                        className="grid size-10 place-items-center rounded-md border border-border bg-surface text-fg-muted transition-colors hover:border-primary hover:text-primary dark:hover:text-[color:var(--primary-soft-fg)]"
+                        className={style}
                       >
-                        <Icon className="size-4" aria-hidden />
+                        {icon}
                       </a>
+                    ) : (
+                      <span
+                        key={social.id}
+                        title="لینک تلگرام هنوز تنظیم نشده است"
+                        aria-label="تلگرام لوران — لینک هنوز تنظیم نشده است"
+                        className="grid size-10 place-items-center rounded-md border border-border bg-surface text-fg-subtle"
+                      >
+                        {icon}
+                      </span>
                     );
                   })}
               </div>

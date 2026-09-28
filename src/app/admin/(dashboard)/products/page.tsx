@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import Image from "next/image";
+import { isLocalUpload } from "@/lib/media";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { AdminPageHeader } from "@/components/admin/AdminShell";
@@ -116,7 +117,7 @@ export default async function AdminProductsPage({
           <Card>
             <div className="flex gap-3">
               <span className="relative size-16 shrink-0 overflow-hidden rounded-md bg-surface-inset">
-                {product.image && <Image src={product.image} alt="" fill sizes="64px" className="object-cover" />}
+                {product.image && <Image src={product.image} unoptimized={isLocalUpload(product.image)} alt="" fill sizes="64px" className="object-cover" />}
               </span>
               <div className="min-w-0 flex-1">
                 <Link href={`/admin/products/${product.slug}`} className="line-clamp-2 text-sm font-medium text-fg hover:text-primary dark:hover:text-[color:var(--primary-soft-fg)]">
@@ -139,7 +140,7 @@ export default async function AdminProductsPage({
             cell: (product) => (
               <div className="flex items-center gap-3">
                 <span className="relative size-11 shrink-0 overflow-hidden rounded-md bg-surface-inset">
-                  {product.image && <Image src={product.image} alt="" fill sizes="44px" className="object-cover" />}
+                  {product.image && <Image src={product.image} unoptimized={isLocalUpload(product.image)} alt="" fill sizes="44px" className="object-cover" />}
                 </span>
                 <div className="min-w-0">
                   <Link href={`/admin/products/${product.slug}`} className="line-clamp-1 font-medium text-fg hover:text-primary dark:hover:text-[color:var(--primary-soft-fg)]">

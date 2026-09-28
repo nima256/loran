@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
+import { isLocalUpload } from "@/lib/media";
 import { GripVertical, ImagePlus, Loader2, Trash2 } from "lucide-react";
 import { Alert } from "@/components/ui/Feedback";
 import { api, errorMessage } from "@/lib/api/client";
@@ -23,37 +24,53 @@ export function ImageUploader({
   images,
   onChange,
   disabled,
+  onUploadingChange,
 }: {
   images: string[];
   onChange: (images: string[]) => void;
   disabled?: boolean;
+  onUploadingChange?: (uploading: boolean) => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const uploadInProgress = useRef(false);
   const [uploading, setUploading] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
   const upload = async (files: FileList | null) => {
-    if (!files?.length) return;
+    if (!files?.length || uploadInProgress.current || disabled) return;
+    uploadInProgress.current = true;
+    onUploadingChange?.(true);
     setError(null);
     setUploading(files.length);
 
     const uploaded: string[] = [];
-    for (const file of Array.from(files)) {
-      const form = new FormData();
-      form.append("file", file);
-      form.append("folder", "products");
-      try {
-        const result = await api.upload<{ url: string }>("/api/v1/admin/media", form);
-        uploaded.push(result.url);
-      } catch (caught) {
-        setError(errorMessage(caught));
-      } finally {
-        setUploading((n) => n - 1);
+    try {
+      for (const file of Array.from(files)) {
+        const form = new FormData();
+        form.append("file", file);
+        form.append("folder", "products");
+        try {
+          const result = await api.upload<{ url: string }>("/api/v1/admin/media", form);
+          // The upload response alone is not proof the new URL is actually
+          // served by this server. Prevent saving a broken product gallery.
+          const check = await fetch(result.url, { method: "HEAD", cache: "no-store" });
+          if (!check.ok || !check.headers.get("content-type")?.startsWith("image/")) {
+            throw new Error("فایل روی دیسک ثبت شد اما آدرس نمایش تصویر قابل دسترسی نیست. تنظیمات مسیر uploads را بررسی کنید.");
+          }
+          uploaded.push(result.url);
+        } catch (caught) {
+          setError(errorMessage(caught));
+        } finally {
+          setUploading((n) => n - 1);
+        }
       }
+      if (uploaded.length) onChange([...images, ...uploaded]);
+    } finally {
+      if (inputRef.current) inputRef.current.value = "";
+      uploadInProgress.current = false;
+      onUploadingChange?.(false);
+      setUploading(0);
     }
-
-    if (uploaded.length) onChange([...images, ...uploaded]);
-    if (inputRef.current) inputRef.current.value = "";
   };
 
   const move = (from: number, to: number) => {
@@ -70,7 +87,7 @@ export function ImageUploader({
         {images.map((url, index) => (
           <li key={url} className="group relative overflow-hidden rounded-md border border-border bg-surface-inset">
             <div className="relative aspect-square">
-              <Image src={url} alt="" fill sizes="200px" className="object-cover" />
+              <Image src={url} unoptimized={isLocalUpload(url)} alt="" fill sizes="200px" className="object-cover" />
             </div>
 
             {index === 0 && (
@@ -84,7 +101,7 @@ export function ImageUploader({
                 <button
                   type="button"
                   onClick={() => move(index, index - 1)}
-                  disabled={disabled || index === 0}
+                  disabled={disabled || uploading > 0 || index === 0}
                   aria-label="انتقال به عقب"
                   className="grid size-7 place-items-center rounded text-white/80 hover:bg-white/15 disabled:opacity-40"
                 >
@@ -93,7 +110,7 @@ export function ImageUploader({
                 <button
                   type="button"
                   onClick={() => move(index, index + 1)}
-                  disabled={disabled || index === images.length - 1}
+                  disabled={disabled || uploading > 0 || index === images.length - 1}
                   aria-label="انتقال به جلو"
                   className="grid size-7 place-items-center rounded text-white/80 hover:bg-white/15 disabled:opacity-40"
                 >
@@ -103,7 +120,7 @@ export function ImageUploader({
               <button
                 type="button"
                 onClick={() => onChange(images.filter((_, i) => i !== index))}
-                disabled={disabled}
+                disabled={disabled || uploading > 0}
                 aria-label="حذف تصویر"
                 className="grid size-7 place-items-center rounded text-white/80 hover:bg-danger/80"
               >
@@ -126,7 +143,7 @@ export function ImageUploader({
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
-            disabled={disabled}
+            disabled={disabled || uploading > 0}
             className={cn(
               "grid aspect-square w-full place-items-center rounded-md border border-dashed border-border",
               "text-fg-subtle transition-colors hover:border-primary hover:text-primary disabled:opacity-50"

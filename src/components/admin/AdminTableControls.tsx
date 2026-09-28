@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Search, X } from "lucide-react";
 import { Pagination } from "@/components/ui/Navigation";
 import { toPersianDigits } from "@/lib/format";
+import { updateAdminQuery } from "@/lib/admin-query";
 import { cn } from "@/lib/utils";
 
 /**
@@ -16,6 +17,67 @@ import { cn } from "@/lib/utils";
  * table into the browser to filter it there.
  */
 
+/**
+ * Keep one optimistic URL across *all* admin filter controls. Without a shared
+ * draft, rapid clicks on different filter rows each start from stale
+ * useSearchParams and overwrite the other choice. In particular, a pending
+ * navigation must not disable filter buttons while its database query runs.
+ */
+type QueryState = { pathname: string; search: string; pending: boolean };
+type QueryContext = {
+  state: QueryState | null;
+  sync: (pathname: string, search: string) => void;
+  change: (pathname: string, current: string, param: string, value: string | null) => void;
+};
+const AdminQueryContext = createContext<QueryContext | null>(null);
+
+export function AdminQueryProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const latest = useRef<QueryState | null>(null);
+  const [state, setState] = useState<QueryState | null>(null);
+
+  const sync = useCallback((pathname: string, search: string) => {
+    const prior = latest.current;
+    // Ignore an intermediate (older) navigation while a newer click is queued.
+    if (prior?.pathname === pathname && prior.pending && prior.search !== search) return;
+    if (prior?.pathname === pathname && !prior.pending && prior.search === search) return;
+    latest.current = { pathname, search, pending: false };
+    setState(null);
+  }, []);
+
+  const change = useCallback((pathname: string, current: string, param: string, value: string | null) => {
+    const previous = latest.current;
+    const base = previous?.pathname === pathname && previous.pending ? previous.search : current;
+    const search = updateAdminQuery(base, param, value);
+    if (search === current && !previous?.pending) return;
+    const draft = { pathname, search, pending: true };
+    latest.current = draft;
+    setState(draft);
+    router.replace(search ? `${pathname}?${search}` : pathname, { scroll: false });
+  }, [router]);
+
+  return <AdminQueryContext.Provider value={{ state, sync, change }}>{children}</AdminQueryContext.Provider>;
+}
+
+function useAdminQuery() {
+  const context = useContext(AdminQueryContext);
+  const pathname = usePathname();
+  const actual = useSearchParams();
+  const current = actual.toString();
+  useEffect(() => context?.sync(pathname, current), [context?.sync, pathname, current]);
+  const search = context?.state?.pathname === pathname ? context.state.search : current;
+  const params = new URLSearchParams(search);
+  const change = (param: string, value: string | null) => {
+    if (context) context.change(pathname, current, param, value);
+    else {
+      // The provider is installed in the admin layout; this also makes a
+      // standalone rendering of the control harmless rather than inert.
+      throw new Error("AdminQueryProvider is missing");
+    }
+  };
+  return { params, pathname, change, pending: context?.state?.pending ?? false };
+}
+
 /** Debounced search box. Typing does not navigate on every keystroke. */
 export function AdminSearch({
   placeholder,
@@ -24,31 +86,23 @@ export function AdminSearch({
   placeholder: string;
   className?: string;
 }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const params = useSearchParams();
-  const [pending, startTransition] = useTransition();
-  const [value, setValue] = useState(params.get("q") ?? "");
+  const { params, change, pending } = useAdminQuery();
+  const current = params.get("q") ?? "";
+  const [value, setValue] = useState(current);
 
-  // Keep in step when the URL changes from elsewhere (back button, reset).
+  // Update on history navigation/filter changes, not every render while typing.
   useEffect(() => {
-    setValue(params.get("q") ?? "");
-  }, [params]);
+    setValue(current);
+  }, [current]);
 
   useEffect(() => {
-    const current = params.get("q") ?? "";
     if (value === current) return;
-
-    const id = setTimeout(() => {
-      const next = new URLSearchParams(params.toString());
-      if (value.trim()) next.set("q", value.trim());
-      else next.delete("q");
-      // A new search always starts at the first page.
-      next.delete("page");
-      startTransition(() => router.replace(`${pathname}?${next.toString()}`));
-    }, 350);
+    const id = setTimeout(() => change("q", value.trim() || null), 350);
     return () => clearTimeout(id);
-  }, [value, params, pathname, router]);
+    // `change` is intentionally not a dependency: only typed text or the
+    // committed URL should restart the debounce, not an optimistic render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value, current]);
 
   return (
     <div className={cn("relative", className)} aria-busy={pending}>
@@ -86,20 +140,9 @@ export function AdminFilterChips({
   options: { value: string; label: string; count?: number }[];
   className?: string;
 }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const params = useSearchParams();
-  const [pending, startTransition] = useTransition();
-
+  const { params, change, pending } = useAdminQuery();
   const active = params.get(param) ?? "";
-
-  const select = (value: string) => {
-    const next = new URLSearchParams(params.toString());
-    if (value) next.set(param, value);
-    else next.delete(param);
-    next.delete("page");
-    startTransition(() => router.replace(`${pathname}?${next.toString()}`));
-  };
+  const select = (value: string) => change(param, value || null);
 
   return (
     <div className={cn("flex flex-wrap gap-1.5", className)} role="group" aria-busy={pending}>
@@ -110,10 +153,9 @@ export function AdminFilterChips({
             key={option.value || "all"}
             type="button"
             onClick={() => select(option.value)}
-            disabled={pending}
             aria-pressed={isActive}
             className={cn(
-              "inline-flex min-h-9 items-center gap-1.5 rounded-md border px-3 text-xs font-medium transition-colors disabled:opacity-60",
+              "inline-flex min-h-9 items-center gap-1.5 rounded-md border px-3 text-xs font-medium transition-colors",
               isActive
                 ? "border-primary bg-primary text-primary-fg"
                 : "border-border bg-surface text-fg-muted hover:border-border-strong hover:text-fg"
@@ -140,8 +182,7 @@ export function AdminPagination({
   totalPages: number;
   className?: string;
 }) {
-  const pathname = usePathname();
-  const params = useSearchParams();
+  const { pathname, params } = useAdminQuery();
 
   if (totalPages <= 1) return null;
 

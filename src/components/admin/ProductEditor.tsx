@@ -93,6 +93,13 @@ export function ProductEditor({
   const [dirty, setDirty] = useState(mode === "create");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [slugTouched, setSlugTouched] = useState(mode === "edit");
+  const [uploadingColors, setUploadingColors] = useState<string[]>([]);
+  const imagesUploading = uploadingColors.length > 0;
+  const setColorUploading = (colorId: string, uploading: boolean) => {
+    setUploadingColors((ids) => uploading
+      ? ids.includes(colorId) ? ids : [...ids, colorId]
+      : ids.filter((id) => id !== colorId));
+  };
 
   const set = <K extends keyof ProductDraft>(key: K, value: ProductDraft[K]) => {
     setDraft((d) => ({ ...d, [key]: value }));
@@ -150,6 +157,10 @@ export function ProductEditor({
   );
 
   const submit = () => {
+    if (imagesUploading) {
+      setTab("media");
+      return;
+    }
     const next: Record<string, string> = {};
     if (draft.name.trim().length < 2) next.name = "نام محصول را وارد کنید.";
     if (!draft.slug.trim()) next.slug = "نشانی (slug) را وارد کنید.";
@@ -284,7 +295,7 @@ export function ProductEditor({
             <Button
               onClick={submit}
               loading={save.pending}
-              disabled={save.pending || (!dirty && mode === "edit")}
+              disabled={save.pending || imagesUploading || (!dirty && mode === "edit")}
               icon={<Save className="size-4" aria-hidden />}
             >
               {mode === "create" ? "ایجاد محصول" : "ذخیره تغییرات"}
@@ -293,6 +304,9 @@ export function ProductEditor({
         }
       />
 
+      {imagesUploading && (
+        <Alert tone="info" role="status" className="mb-4">آپلود تصاویر هنوز تمام نشده است؛ پس از اتمام می‌توانید محصول را ذخیره کنید.</Alert>
+      )}
       {save.error && <Alert tone="danger" role="alert" className="mb-4">{save.error}</Alert>}
 
       <Tabs
@@ -524,6 +538,7 @@ export function ProductEditor({
                 <ImageUploader
                   images={color.images}
                   onChange={(images) => setColorImages(color.colorId, images)}
+                  onUploadingChange={(uploading) => setColorUploading(color.colorId, uploading)}
                   disabled={save.pending}
                 />
               </Card>

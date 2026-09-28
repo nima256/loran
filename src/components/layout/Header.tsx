@@ -53,10 +53,10 @@ export function Header() {
     setSearchOpen(false);
   }, [pathname]);
 
-  // ⌘K / Ctrl+K opens search from anywhere.
+  // ⌘I / Ctrl+I opens search from anywhere.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+      if ((e.metaKey || e.ctrlKey) && !e.shiftKey && !e.altKey && e.key.toLowerCase() === "i") {
         e.preventDefault();
         setSearchOpen(true);
       }
@@ -215,7 +215,7 @@ export function Header() {
               >
                 <Search className="size-4 shrink-0" aria-hidden />
                 <span className="hidden xl:inline">جست‌وجو در محصولات</span>
-                <kbd className="ms-auto hidden rounded border border-border px-1.5 py-0.5 font-sans text-[0.625rem] text-fg-subtle xl:inline">Ctrl K</kbd>
+                <kbd className="ms-auto hidden rounded border border-border px-1.5 py-0.5 font-sans text-[0.625rem] text-fg-subtle xl:inline">Ctrl I</kbd>
               </button>
               <ThemeToggle />
               <Link

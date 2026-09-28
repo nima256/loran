@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import { isLocalUpload } from "@/lib/media";
 import Link from "next/link";
 import { ArrowLeft, FileText, Package, Search } from "lucide-react";
 import { Card } from "@/components/ui/Card";
@@ -135,7 +136,7 @@ function OrdersList() {
                         className="relative size-14 overflow-hidden rounded-md border-2 border-surface bg-surface-inset"
                       >
                         {item.image ? (
-                          <Image src={item.image} alt={item.name} fill sizes="56px" className="object-cover" />
+                          <Image src={item.image} unoptimized={isLocalUpload(item.image)} alt={item.name} fill sizes="56px" className="object-cover" />
                         ) : null}
                       </span>
                     ))}

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { isLocalUpload } from "@/lib/media";
 import Link from "next/link";
 import { ArrowLeft, ShoppingBag, Trash2 } from "lucide-react";
 import { Button, ButtonLink } from "@/components/ui/Button";
@@ -92,7 +93,7 @@ export default function CartPage() {
                   href={`/product/${item.slug}`}
                   className="relative size-24 shrink-0 overflow-hidden rounded-md bg-surface-inset sm:size-28"
                 >
-                  <Image src={item.image} alt={item.name} fill sizes="112px" className="object-cover" />
+                  <Image src={item.image} unoptimized={isLocalUpload(item.image)} alt={item.name} fill sizes="112px" className="object-cover" />
                 </Link>
 
                 <div className="flex min-w-0 flex-1 flex-col">

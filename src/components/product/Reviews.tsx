@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { MessageSquarePlus, ShieldCheck, ThumbsUp } from "lucide-react";
+import { MessageSquarePlus, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Modal } from "@/components/ui/Overlay";
@@ -190,10 +190,6 @@ export function Reviews({
                       سایز: {SIZE_FEEDBACK_LABELS[review.sizeFeedback]}
                     </span>
                   )}
-                  <span className="tnum inline-flex items-center gap-1">
-                    <ThumbsUp className="size-3.5" aria-hidden />
-                    {toPersianDigits(review.helpfulCount)} نفر مفید دانستند
-                  </span>
                 </div>
               </li>
             ))}
