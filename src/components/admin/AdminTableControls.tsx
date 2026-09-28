@@ -1,84 +1,24 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 import { Search, X } from "lucide-react";
 import { Pagination } from "@/components/ui/Navigation";
 import { toPersianDigits } from "@/lib/format";
-import { updateAdminQuery } from "@/lib/admin-query";
+import { buildAdminQueryHref } from "@/lib/admin-query";
 import { cn } from "@/lib/utils";
 
 /**
- * Shared controls for the admin's server-side tables.
+ * Admin lists are filtered on the server using URL query parameters.
  *
- * Search, filters and the page number all live in the query string. That makes
- * a filtered view shareable and back-button-safe, and — more importantly — it
- * means the *server* does the filtering: these tables must never pull a whole
- * table into the browser to filter it there.
+ * Do NOT hold a separate optimistic/pending copy of the URL in a persistent
+ * admin layout: it can get out of sync with App Router navigation, leaving
+ * every chip visually selected but unable to update the actual results.
+ * Real GET links and forms make each navigation independent, work on repeated
+ * clicks, and retain normal back/forward/refresh behavior.
  */
 
-/**
- * Keep one optimistic URL across *all* admin filter controls. Without a shared
- * draft, rapid clicks on different filter rows each start from stale
- * useSearchParams and overwrite the other choice. In particular, a pending
- * navigation must not disable filter buttons while its database query runs.
- */
-type QueryState = { pathname: string; search: string; pending: boolean };
-type QueryContext = {
-  state: QueryState | null;
-  sync: (pathname: string, search: string) => void;
-  change: (pathname: string, current: string, param: string, value: string | null) => void;
-};
-const AdminQueryContext = createContext<QueryContext | null>(null);
-
-export function AdminQueryProvider({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
-  const latest = useRef<QueryState | null>(null);
-  const [state, setState] = useState<QueryState | null>(null);
-
-  const sync = useCallback((pathname: string, search: string) => {
-    const prior = latest.current;
-    // Ignore an intermediate (older) navigation while a newer click is queued.
-    if (prior?.pathname === pathname && prior.pending && prior.search !== search) return;
-    if (prior?.pathname === pathname && !prior.pending && prior.search === search) return;
-    latest.current = { pathname, search, pending: false };
-    setState(null);
-  }, []);
-
-  const change = useCallback((pathname: string, current: string, param: string, value: string | null) => {
-    const previous = latest.current;
-    const base = previous?.pathname === pathname && previous.pending ? previous.search : current;
-    const search = updateAdminQuery(base, param, value);
-    if (search === current && !previous?.pending) return;
-    const draft = { pathname, search, pending: true };
-    latest.current = draft;
-    setState(draft);
-    router.replace(search ? `${pathname}?${search}` : pathname, { scroll: false });
-  }, [router]);
-
-  return <AdminQueryContext.Provider value={{ state, sync, change }}>{children}</AdminQueryContext.Provider>;
-}
-
-function useAdminQuery() {
-  const context = useContext(AdminQueryContext);
-  const pathname = usePathname();
-  const actual = useSearchParams();
-  const current = actual.toString();
-  useEffect(() => context?.sync(pathname, current), [context?.sync, pathname, current]);
-  const search = context?.state?.pathname === pathname ? context.state.search : current;
-  const params = new URLSearchParams(search);
-  const change = (param: string, value: string | null) => {
-    if (context) context.change(pathname, current, param, value);
-    else {
-      // The provider is installed in the admin layout; this also makes a
-      // standalone rendering of the control harmless rather than inert.
-      throw new Error("AdminQueryProvider is missing");
-    }
-  };
-  return { params, pathname, change, pending: context?.state?.pending ?? false };
-}
-
-/** Debounced search box. Typing does not navigate on every keystroke. */
+/** Debounced native GET search; pressing Enter submits immediately. */
 export function AdminSearch({
   placeholder,
   className,
@@ -86,28 +26,31 @@ export function AdminSearch({
   placeholder: string;
   className?: string;
 }) {
-  const { params, change, pending } = useAdminQuery();
+  const pathname = usePathname();
+  const params = useSearchParams();
   const current = params.get("q") ?? "";
   const [value, setValue] = useState(current);
+  const formRef = useRef<HTMLFormElement>(null);
 
-  // Update on history navigation/filter changes, not every render while typing.
   useEffect(() => {
     setValue(current);
   }, [current]);
 
   useEffect(() => {
     if (value === current) return;
-    const id = setTimeout(() => change("q", value.trim() || null), 350);
-    return () => clearTimeout(id);
-    // `change` is intentionally not a dependency: only typed text or the
-    // committed URL should restart the debounce, not an optimistic render.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const id = window.setTimeout(() => formRef.current?.requestSubmit(), 550);
+    return () => window.clearTimeout(id);
   }, [value, current]);
 
   return (
-    <div className={cn("relative", className)} aria-busy={pending}>
+    <form ref={formRef} action={pathname} method="get" role="search" className={cn("relative", className)}>
+      {/* Preserve other filters, but start the new search from page one. */}
+      {Array.from(params.entries())
+        .filter(([key]) => key !== "q" && key !== "page")
+        .map(([key, item], index) => <input type="hidden" name={key} value={item} key={`${key}-${index}`} />)}
       <Search className="pointer-events-none absolute inset-y-0 start-3 my-auto size-4 text-fg-subtle" aria-hidden />
       <input
+        name="q"
         type="search"
         value={value}
         onChange={(e) => setValue(e.target.value)}
@@ -126,34 +69,36 @@ export function AdminSearch({
           <X className="size-4" aria-hidden />
         </button>
       )}
-    </div>
+    </form>
   );
 }
 
-/** A set of mutually exclusive filter chips backed by one query parameter. */
+/** Actual GET links, rather than buttons disabled during router transitions. */
 export function AdminFilterChips({
   param,
   options,
   className,
+  defaultValue = "",
 }: {
   param: string;
   options: { value: string; label: string; count?: number }[];
   className?: string;
+  defaultValue?: string;
 }) {
-  const { params, change, pending } = useAdminQuery();
-  const active = params.get(param) ?? "";
-  const select = (value: string) => change(param, value || null);
+  const pathname = usePathname();
+  const params = useSearchParams();
+  const search = params.toString();
+  const active = params.get(param) ?? defaultValue;
 
   return (
-    <div className={cn("flex flex-wrap gap-1.5", className)} role="group" aria-busy={pending}>
+    <div className={cn("flex flex-wrap gap-1.5", className)} role="group">
       {options.map((option) => {
         const isActive = active === option.value;
         return (
-          <button
+          <a
             key={option.value || "all"}
-            type="button"
-            onClick={() => select(option.value)}
-            aria-pressed={isActive}
+            href={buildAdminQueryHref(pathname, search, param, option.value || null)}
+            aria-current={isActive ? "true" : undefined}
             className={cn(
               "inline-flex min-h-9 items-center gap-1.5 rounded-md border px-3 text-xs font-medium transition-colors",
               isActive
@@ -165,14 +110,14 @@ export function AdminFilterChips({
             {option.count != null && (
               <span className="tnum opacity-75">{toPersianDigits(option.count)}</span>
             )}
-          </button>
+          </a>
         );
       })}
     </div>
   );
 }
 
-/** Pagination that preserves the current filters. */
+/** Pagination also uses full GET navigation, preserving active filter values. */
 export function AdminPagination({
   page,
   totalPages,
@@ -182,7 +127,8 @@ export function AdminPagination({
   totalPages: number;
   className?: string;
 }) {
-  const { pathname, params } = useAdminQuery();
+  const pathname = usePathname();
+  const params = useSearchParams();
 
   if (totalPages <= 1) return null;
 
@@ -194,10 +140,10 @@ export function AdminPagination({
     return query ? `${pathname}?${query}` : pathname;
   };
 
-  return <Pagination page={page} totalPages={totalPages} buildHref={hrefFor} className={className} />;
+  return <Pagination page={page} totalPages={totalPages} buildHref={hrefFor} nativeLinks className={className} />;
 }
 
-/** "Showing X of Y", so the operator knows the table is not the whole table. */
+/** "Showing X of Y" for the server-side result set. */
 export function AdminResultCount({
   page,
   pageSize,

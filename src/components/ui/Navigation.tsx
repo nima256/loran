@@ -10,13 +10,14 @@ import { cn } from "@/lib/utils";
  * accordingly so the arrows match the reading direction.
  */
 export function Pagination({
-  page, totalPages, buildHref, onPageChange, className,
+  page, totalPages, buildHref, onPageChange, className, nativeLinks = false,
 }: {
   page: number;
   totalPages: number;
   buildHref?: (page: number) => string;
   onPageChange?: (page: number) => void;
   className?: string;
+  nativeLinks?: boolean;
 }) {
   if (totalPages <= 1) return null;
 
@@ -39,7 +40,11 @@ export function Pagination({
     const active = value === page;
     const content = toPersianDigits(value);
     const label = active ? `صفحه ${content}، صفحه فعلی` : `صفحه ${content}`;
-    return buildHref ? (
+    return buildHref && nativeLinks ? (
+      <a href={buildHref(value)} aria-label={label} aria-current={active ? "page" : undefined} className={itemClass(active)}>
+        {content}
+      </a>
+    ) : buildHref ? (
       <Link href={buildHref(value)} aria-label={label} aria-current={active ? "page" : undefined} className={itemClass(active)}>
         {content}
       </Link>
@@ -52,7 +57,9 @@ export function Pagination({
 
   const Arrow = ({ to, disabled, label, children }: { to: number; disabled: boolean; label: string; children: React.ReactNode }) => {
     const cls = cn(itemClass(false), disabled && "pointer-events-none opacity-40");
-    return buildHref && !disabled ? (
+    return buildHref && !disabled && nativeLinks ? (
+      <a href={buildHref(to)} aria-label={label} className={cls}>{children}</a>
+    ) : buildHref && !disabled ? (
       <Link href={buildHref(to)} aria-label={label} className={cls}>{children}</Link>
     ) : (
       <button type="button" disabled={disabled} onClick={() => onPageChange?.(to)} aria-label={label} className={cls}>

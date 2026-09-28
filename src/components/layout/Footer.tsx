@@ -86,31 +86,20 @@ export function Footer() {
               <p className="text-sm font-medium text-fg">ما را دنبال کنید</p>
               <div className="mt-1 flex flex-wrap gap-2">
                 {siteConfig.social
-                  .filter((social) => social.url || social.id === "telegram")
+                  .filter((social) => social.url.length > 0)
                   .map((social) => {
                     const Icon = social.id === "telegram" ? TelegramIcon : SOCIAL_ICONS[social.id] ?? Instagram;
-                    const icon = <Icon className="size-4" aria-hidden />;
-                    const style = "grid size-10 place-items-center rounded-md border border-border bg-surface text-fg-muted transition-colors hover:border-primary hover:text-primary dark:hover:text-[color:var(--primary-soft-fg)]";
-                    return social.url ? (
+                    return (
                       <a
                         key={social.id}
                         href={social.url}
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={`${social.label} لوران ${social.handle}`}
-                        className={style}
+                        className="grid size-10 place-items-center rounded-md border border-border bg-surface text-fg-muted transition-colors hover:border-primary hover:text-primary dark:hover:text-[color:var(--primary-soft-fg)]"
                       >
-                        {icon}
+                        <Icon className="size-4" aria-hidden />
                       </a>
-                    ) : (
-                      <span
-                        key={social.id}
-                        title="لینک تلگرام هنوز تنظیم نشده است"
-                        aria-label="تلگرام لوران — لینک هنوز تنظیم نشده است"
-                        className="grid size-10 place-items-center rounded-md border border-border bg-surface text-fg-subtle"
-                      >
-                        {icon}
-                      </span>
                     );
                   })}
               </div>

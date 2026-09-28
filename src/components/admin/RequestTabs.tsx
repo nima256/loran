@@ -1,46 +1,53 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useTransition } from "react";
-import { Tabs } from "@/components/ui/Navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+import { toPersianDigits } from "@/lib/format";
+import { cn } from "@/lib/utils";
 
-/**
- * Tab switcher for the requests screen.
- *
- * The tab lives in the query string so a refresh, the back button and a shared
- * link all land on the same list.
- */
+/** GET-based tabs, so a new requests list is always loaded on the server. */
 export function RequestTabs({
   counts,
 }: {
   counts: { consultations: number; contact: number; newsletter: number };
 }) {
-  const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
-  const [, startTransition] = useTransition();
-
   const current = params.get("tab") ?? "consultations";
+  const tabs = [
+    { value: "consultations", label: "مشاوره سایز", count: counts.consultations },
+    { value: "contact", label: "تماس با ما", count: counts.contact },
+    { value: "newsletter", label: "خبرنامه", count: counts.newsletter },
+  ];
 
-  const select = (tab: string) => {
+  const hrefFor = (tab: string) => {
     const next = new URLSearchParams(params.toString());
     next.set("tab", tab);
-    // Filters belong to the list that was showing; a new tab starts clean.
-    next.delete("status");
+    next.delete("status"); // Different lists must not share a status filter.
     next.delete("page");
-    startTransition(() => router.replace(`${pathname}?${next.toString()}`));
+    return `${pathname}?${next.toString()}`;
   };
 
   return (
-    <Tabs
-      className="mb-4"
-      value={current}
-      onChange={select}
-      tabs={[
-        { value: "consultations", label: "مشاوره سایز", count: counts.consultations },
-        { value: "contact", label: "تماس با ما", count: counts.contact },
-        { value: "newsletter", label: "خبرنامه", count: counts.newsletter },
-      ]}
-    />
+    <nav aria-label="نوع درخواست" className="mb-4 border-b border-border">
+      <div className="no-scrollbar -mb-px flex gap-1 overflow-x-auto">
+        {tabs.map((tab) => {
+          const active = current === tab.value;
+          return (
+            <a
+              key={tab.value}
+              href={hrefFor(tab.value)}
+              aria-current={active ? "page" : undefined}
+              className={cn(
+                "relative shrink-0 border-b-2 px-4 py-3 text-sm font-medium transition-colors",
+                active ? "border-primary text-primary dark:text-[color:var(--primary-soft-fg)]" : "border-transparent text-fg-muted hover:text-fg"
+              )}
+            >
+              {tab.label}
+              <span className="tnum ms-1.5 text-xs text-fg-subtle">{toPersianDigits(tab.count)}</span>
+            </a>
+          );
+        })}
+      </div>
+    </nav>
   );
 }

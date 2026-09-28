@@ -102,6 +102,7 @@ export default async function AdminReviewsPage({
         <Suspense fallback={null}>
           <AdminFilterChips
             param="status"
+            defaultValue="pending"
             options={[
               { value: "pending", label: "در انتظار بررسی", count: countByStatus.get("pending") ?? 0 },
               { value: "approved", label: "منتشر شده", count: countByStatus.get("approved") ?? 0 },

@@ -63,7 +63,7 @@ export const siteConfig = {
   social: [
     { id: "instagram", label: "اینستاگرام", handle: "@Loran_Shoes", url: "https://instagram.com/Loran_Shoes" },
     { id: "instagram2", label: "اینستاگرام دوم", handle: "@Loran_Shoes2", url: "https://instagram.com/Loran_Shoes2" },
-    { id: "telegram", label: "تلگرام", handle: "", url: "" }, // TODO
+    { id: "telegram", label: "تلگرام", handle: "@loran_shoes", url: "https://t.me/loran_shoes" },
     { id: "whatsapp", label: "واتس‌اپ", handle: "", url: "" }, // TODO
   ],
 

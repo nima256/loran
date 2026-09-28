@@ -15,7 +15,9 @@ export default async function AdminDashboardLayout({ children }: { children: Rea
   const admin = await getAdmin();
   if (!admin) redirect("/admin/login");
 
-  return <AdminShell admin={{ name: admin.name, email: admin.email }}>{children}</AdminShell>;
+  return (
+    <AdminShell admin={{ name: admin.name, email: admin.email }}>{children}</AdminShell>
+  );
 }
 
 // The admin panel is per-session and must never be statically cached.
