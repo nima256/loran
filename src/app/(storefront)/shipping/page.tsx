@@ -3,7 +3,6 @@ import Link from "next/link";
 import { Clock, MapPin, PackageCheck, Truck } from "lucide-react";
 import { ContentList, ContentPage, ContentSection } from "@/components/ui/Prose";
 import { Card } from "@/components/ui/Card";
-import { Alert } from "@/components/ui/Feedback";
 import { Badge } from "@/components/ui/Badge";
 import { listShippingMethods } from "@/server/services/shipping";
 import { siteConfig } from "@/lib/site-config";
@@ -11,7 +10,7 @@ import { formatAmount, toPersianDigits } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "شیوه‌های ارسال",
-  description: "اطلاعات ارسال سفارش‌های لوران با تیپاکس، زمان تحویل و هزینه کرایه.",
+  description: "اطلاعات ارسال سفارش‌های لوران با پست پیشتاز و تیپاکس، زمان تحویل و هزینه کرایه.",
 };
 
 /** Rendered on demand so a change in the admin panel shows immediately. */
@@ -37,11 +36,6 @@ export default async function ShippingPage() {
         </Card>
       }
     >
-      <Alert tone="warning" title="کرایه ارسال هنگام تحویل پرداخت می‌شود">
-        شیوه ارسال فعلی لوران <strong>تیپاکس پس‌کرایه</strong> است. مبلغی که در سایت پرداخت
-        می‌کنید فقط بابت کالاهاست؛ کرایه مرسوله را هنگام تحویل، مستقیماً به مأمور تیپاکس
-        می‌پردازید.
-      </Alert>
 
       <ContentSection title="شیوه‌های ارسال">
         <ul className="not-prose space-y-3">
@@ -70,7 +64,7 @@ export default async function ShippingPage() {
                   <div className="flex gap-1.5">
                     <dt className="text-fg-subtle">هزینه:</dt>
                     <dd className="tnum text-fg">
-                      {method.paidOnDelivery ? "طبق تعرفه تیپاکس، هنگام تحویل" : `${formatAmount(method.cost)} تومان`}
+                      {method.paidOnDelivery ? "طبق تعرفه شرکت حمل، هنگام تحویل" : `${formatAmount(method.cost)} تومان`}
                     </dd>
                   </div>
                 </dl>
@@ -85,8 +79,8 @@ export default async function ShippingPage() {
           {[
             { icon: PackageCheck, title: "ثبت و تأیید سفارش", body: "بلافاصله پس از پرداخت، سفارش در انبار لوران ثبت می‌شود." },
             { icon: Clock, title: "آماده‌سازی و بسته‌بندی", body: "طی یک روز کاری، کالا کنترل کیفی و بسته‌بندی می‌شود." },
-            { icon: Truck, title: "تحویل به تیپاکس", body: "کد رهگیری برایتان پیامک می‌شود و در حساب کاربری هم قابل مشاهده است." },
-            { icon: MapPin, title: "تحویل به شما", body: "مأمور تیپاکس تماس می‌گیرد؛ کرایه را همان موقع پرداخت می‌کنید." },
+            { icon: Truck, title: "تحویل به شرکت حمل", body: "سفارش مطابق روش ارسال انتخابی تحویل شرکت حمل می‌شود و کد رهگیری برایتان ارسال خواهد شد." },
+            { icon: MapPin, title: "تحویل به شما", body: "پست پیشتاز پیش‌کرایه است و هزینه آن در سایت پرداخت می‌شود؛ تیپاکس پس‌کرایه است و کرایه آن هنگام تحویل دریافت می‌شود." },
           ].map(({ icon: Icon, title, body }, i) => (
             <li key={title} className="flex gap-3 rounded-lg border border-border bg-surface p-4">
               <span className="tnum grid size-8 shrink-0 place-items-center rounded-full bg-primary-soft text-sm font-bold text-primary-soft-fg">
@@ -107,9 +101,9 @@ export default async function ShippingPage() {
       <ContentSection title="نکته‌های مهم">
         <ContentList
           items={[
-            `سفارش‌های بالای ${formatAmount(siteConfig.commerce.freeShippingThreshold)} تومان مشمول ارسال رایگان می‌شوند؛ در این حالت کرایه تیپاکس از سوی لوران پرداخت می‌شود.`,
+            `سفارش‌های بالای ${formatAmount(siteConfig.commerce.freeShippingThreshold)} تومان مشمول ارسال رایگان می‌شوند؛ در این حالت کرایه ارسال از سوی لوران پرداخت می‌شود.`,
             "سفارش‌های ثبت‌شده در روزهای تعطیل، اولین روز کاری بعد آماده‌سازی می‌شوند.",
-            "هنگام تحویل، پیش از پرداخت کرایه، سلامت ظاهری بسته را بررسی کنید.",
+            "هنگام تحویل، سلامت ظاهری بسته را بررسی کنید.",
             "اگر گیرنده شخص دیگری است، نام و شماره او را در آدرس ثبت کنید.",
             <>
               وضعیت سفارش را می‌توانید از{" "}

@@ -124,7 +124,7 @@ export function Hero() {
             <div className="relative h-[18rem] sm:h-[22rem] lg:h-[29rem]">
               <Image
                 src="/brand/hero-sneakers.png"
-                alt="یک جفت کتانی ساق‌دار لوران که از بند کفش آویزان است"
+                alt="یک جفت کتونی ساق‌دار لوران که از بند کفش آویزان است"
                 width={606}
                 height={765}
                 priority

@@ -5,10 +5,10 @@ import { BadgeCheck, Headphones, RefreshCw, Truck } from "lucide-react";
  * Rendered once, directly above the footer (see the storefront layout).
  */
 const ITEMS = [
-  { icon: Truck, title: "ارسال به سراسر ایران", body: "با تیپاکس، ۲ تا ۴ روز کاری" },
-  { icon: RefreshCw, title: "۲ روز کاری مهلت تعویض", body: "اگر سایز مناسب نبود، تعویض کنید" },
+  { icon: Truck, title: "ارسال روز فردای ثبت سفارش", body: "تحویل ۲ تا ۴ روز کاری" },
+  { icon: RefreshCw, title: "۲ روز کاری مهلت تعویض", body: "تعویض به هر دلیلی" },
   { icon: BadgeCheck, title: "ضمانت اصالت کالا", body: "همان کفشی که در ویترین می‌بینید" },
-  { icon: Headphones, title: "پشتیبانی و مشاوره سایز", body: "شنبه تا پنجشنبه، ۱۰:۰۰ تا ۲۲:۰۰" },
+  { icon: Headphones, title: "پشتیبانی و مشاوره سایز", body: "پشتیبانی هر روزه" },
 ];
 
 export function ValueProps() {

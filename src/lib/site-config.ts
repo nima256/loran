@@ -14,19 +14,19 @@ export const siteConfig = {
   url: "https://loranworld.com",
   tagline: "کفشی که پای تو را می‌شناسد",
   description:
-    "فروشگاه اینترنتی کفش لوران در یزد؛ اسنیکر، کتانی، رسمی و روزمره برای زنان و مردان با ارسال به سراسر ایران.",
+    "فروشگاه اینترنتی کفش لوران در یزد؛ اسنیکر، کتونی، رسمی و روزمره برای زنان و مردان با ارسال به سراسر ایران.",
 
   /** Shown on the contact page and in the footer. */
   contact: {
     // TODO: replace with the final published support number.
-    supportPhone: "۰۹۱۷۴۷۳۶۹۷۵",
-    supportPhoneRaw: "+989174736975",
+    supportPhone: "۰۹۰۱۰۸۷۷۲۷۵",
+    supportPhoneRaw: "+989010877275",
     /** Live support chat — the floating button and the contact page. */
     telegramHandle: "@loranadmin",
     telegramUrl: "https://t.me/loranadmin",
     // TODO: replace with the official support email.
     email: "info@loranworld.com",
-    workingHours: "شنبه تا پنجشنبه، ۱۰:۰۰ تا ۲۲:۰۰",
+    workingHours: "پشتیبانی همه روزه",
   },
 
   /** From the business card. Verify and extend before launch. */
@@ -79,7 +79,7 @@ export const siteConfig = {
     currency: "تومان",
     freeShippingThreshold: 8_000_000,
     /** Tipax is postpaid — collected by the courier, not by Loran online. */
-    shippingNoticeShort: "هزینه ارسال هنگام تحویل، نزد پیک تیپاکس پرداخت می‌شود.",
+    shippingNoticeShort: "در صورت انتخاب تیپاکس، کرایه هنگام تحویل مرسوله پرداخت می‌شود.",
     /**
      * Exchange-only policy (no returns/refunds): exchanges can be requested
      * within this many business days (Saturday–Thursday) of delivery. See

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, MapPin, Package, RotateCcw, Truck } from "lucide-react";
+import { ArrowLeft, MapPin, Package, Truck } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { ButtonLink } from "@/components/ui/Button";
 import { EmptyState, Skeleton } from "@/components/ui/Feedback";
@@ -54,7 +54,6 @@ export default function AccountDashboard() {
     { label: "سفارش‌های من", value: stat(counts?.orders), href: "/account/orders", icon: Package },
     { label: "در حال پیگیری", value: stat(counts?.openOrders), href: "/account/orders", icon: Truck },
     { label: "آدرس‌های ذخیره‌شده", value: stat(counts?.addresses), href: "/account/addresses", icon: MapPin },
-    { label: "درخواست‌های تعویض", value: stat(counts?.returns), href: "/account/exchanges", icon: RotateCcw },
   ];
 
   return (

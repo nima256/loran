@@ -572,7 +572,13 @@ export async function changeOrderStatus(input: StatusChangeInput): Promise<void>
       }
     } else if (
       ["awaiting_payment", "payment_failed", "expired"].includes(input.status) ||
-      !canTransition(order.status, input.status)
+      !(
+        // Admins may select any operational stage directly for a paid order;
+        // unpaid orders and refunded money must never be represented as paid.
+        (["preparing", "packaged", "shipped", "delivered"].includes(input.status) &&
+         order.paymentStatus === "paid" && order.status !== "refunded") ||
+        canTransition(order.status, input.status)
+      )
     ) {
       throw conflict(`تغییر وضعیت از «${order.status}» به «${input.status}» مجاز نیست.`);
     }

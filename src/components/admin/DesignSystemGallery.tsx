@@ -269,7 +269,7 @@ export function DesignSystemGallery({ sample }: { sample: ProductSummary }) {
 
         <Section title="ناوبری">
           <div className="space-y-6">
-            <Breadcrumbs items={[{ label: "خانه", href: "/" }, { label: "فروشگاه", href: "/shop" }, { label: "کتانی و اسنیکر" }]} />
+            <Breadcrumbs items={[{ label: "خانه", href: "/" }, { label: "فروشگاه", href: "/shop" }, { label: "کتونی و اسنیکر" }]} />
             <Tabs value={tab} onChange={setTab} tabs={[{ value: "a", label: "همه", count: 12 }, { value: "b", label: "جاری", count: 3 }, { value: "c", label: "تحویل‌شده" }]} />
             <Stepper steps={["آدرس تحویل", "ارسال و پرداخت", "بررسی نهایی"]} current={1} />
             <Pagination page={page} totalPages={8} onPageChange={setPage} />
@@ -292,7 +292,7 @@ export function DesignSystemGallery({ sample }: { sample: ProductSummary }) {
           </div>
 
           <div className="mt-5 flex flex-wrap gap-3">
-            <Button variant="secondary" onClick={() => toast({ tone: "success", title: "به سبد خرید اضافه شد", description: "کتانی مشکی، سایز ۴۲" })}>نمایش توست موفق</Button>
+            <Button variant="secondary" onClick={() => toast({ tone: "success", title: "به سبد خرید اضافه شد", description: "کتونی مشکی، سایز ۴۲" })}>نمایش توست موفق</Button>
             <Button variant="secondary" onClick={() => toast({ tone: "error", title: "کد تخفیف نامعتبر است" })}>نمایش توست خطا</Button>
             <Button variant="secondary" onClick={() => toast({ tone: "info", title: "کالا حذف شد", action: { label: "بازگردانی", onClick: () => {} } })}>توست با بازگردانی</Button>
           </div>

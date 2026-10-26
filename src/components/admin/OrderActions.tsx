@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Undo2, Save, ShieldAlert, Trash2, Truck } from "lucide-react";
+import { CheckCircle2, CircleDollarSign, Clock, PackageCheck, Save, ShieldAlert, Trash2, Truck } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input, Select, Textarea } from "@/components/ui/Input";
 import { Checkbox } from "@/components/ui/Checkbox";
@@ -11,7 +11,7 @@ import { Alert } from "@/components/ui/Feedback";
 import { useToast } from "@/components/ui/Toast";
 import { api } from "@/lib/api/client";
 import { useAction } from "@/lib/use-action";
-import { ORDER_STATUS_LABELS } from "@/lib/orders";
+import { ORDER_STATUS_LABELS, ORDER_STATUS_FLOW } from "@/lib/orders";
 import type { AnyOrderStatus } from "@/types";
 
 /**
@@ -23,45 +23,31 @@ import type { AnyOrderStatus } from "@/types";
  * so a double-click cannot fire two status changes.
  */
 
+const STATUS_ICONS = [CircleDollarSign, Clock, PackageCheck, Truck, CheckCircle2] as const;
+
+/** Select operational statuses from the timeline itself; cancellation is separate. */
 export function OrderStatusActions({
-  orderId,
-  orderNumber,
-  status,
-  allowedStatuses,
-  previousStatus,
-  paymentStatus,
+  orderId, orderNumber, status, paymentStatus,
 }: {
   orderId: string;
   orderNumber: string;
   status: AnyOrderStatus;
-  allowedStatuses: string[];
-  previousStatus: AnyOrderStatus | null;
   paymentStatus: string;
 }) {
   const router = useRouter();
   const { toast } = useToast();
-  const [note, setNote] = useState("");
   const [target, setTarget] = useState<string | null>(null);
   const [cancelStep, setCancelStep] = useState<0 | 1 | 2>(0);
   const [cancelAcknowledged, setCancelAcknowledged] = useState(false);
-  const [undoOpen, setUndoOpen] = useState(false);
-  const [cancelIsUndo, setCancelIsUndo] = useState(false);
-
   const closeCancel = () => {
-    if (change.pending) return;
-    setCancelStep(0);
-    setCancelAcknowledged(false);
-    setCancelIsUndo(false);
+    if (!change.pending) { setCancelStep(0); setCancelAcknowledged(false); }
   };
-
   const change = useAction(
-    async ({ next, undo = false }: { next: string; undo?: boolean }) => {
+    async (next: string) => {
       setTarget(next);
       return api.post(`/api/v1/admin/orders/${orderId}/status`, {
         status: next,
         expectedStatus: status,
-        ...(undo ? { undo: true } : {}),
-        note: note.trim() || undefined,
         ...(next === "cancelled" ? {
           cancellationConfirmation: { orderNumber, acknowledged: true },
         } : {}),
@@ -69,12 +55,9 @@ export function OrderStatusActions({
     },
     {
       onSuccess: () => {
-        setNote("");
         setTarget(null);
         setCancelStep(0);
         setCancelAcknowledged(false);
-        setCancelIsUndo(false);
-        setUndoOpen(false);
         toast({ tone: "success", title: "وضعیت سفارش تغییر کرد" });
         router.refresh();
       },
@@ -85,155 +68,91 @@ export function OrderStatusActions({
     }
   );
 
-  const showUndo = Boolean(previousStatus && previousStatus !== status);
-  const requiresCancellationConfirmation = previousStatus === "cancelled";
-  // A financial refund cannot be undone just by changing a status label.
-  const hasRefundWarning = status === "refunded" || paymentStatus === "refunded";
+  const currentIndex = ORDER_STATUS_FLOW.indexOf(status as typeof ORDER_STATUS_FLOW[number]);
+  const canSetStage = paymentStatus === "paid" && status !== "refunded";
+  const canCancel = ["awaiting_payment", "preparing", "packaged", "payment_failed", "expired"].includes(status);
 
   return (
-    <div className="mt-6 border-t border-border pt-4">
-      <h3 className="mb-3 text-sm font-medium text-fg">تغییر وضعیت</h3>
-
-      <Textarea
-        label="یادداشت (اختیاری)"
-        rows={2}
-        value={note}
-        onChange={(e) => setNote(e.target.value)}
-        hint="در تاریخچه سفارش ثبت می‌شود."
-        disabled={change.pending}
-        className="mb-3"
-      />
-
-      {showUndo && previousStatus && (
-        <div className="mb-3 rounded-lg border border-border bg-surface-2 p-3">
-          <p className="mb-2 text-xs leading-6 text-fg-muted">
-            وضعیت قبلی این سفارش: «{ORDER_STATUS_LABELS[previousStatus]}». با بازگشت، وضعیت جدید در تاریخچه سفارش ثبت می‌شود.
-          </p>
-          <Button
-            type="button"
-            size="sm"
-            variant="secondary"
-            loading={change.pending && target === previousStatus}
-            disabled={change.pending}
-            onClick={() => {
-              if (requiresCancellationConfirmation) { setCancelIsUndo(true); setCancelStep(1); }
-              else setUndoOpen(true);
-            }}
-            icon={<Undo2 className="size-4" aria-hidden />}
-          >
-            بازگشت به «{ORDER_STATUS_LABELS[previousStatus]}»
-          </Button>
-        </div>
-      )}
-
-      <div className="flex flex-wrap gap-2">
-        {allowedStatuses.filter((next) => next !== previousStatus).map((next) => (
-          <Button
-            key={next}
-            type="button"
-            size="sm"
-            variant={next === "cancelled" || next === "refunded" ? "ghost" : "secondary"}
-            loading={change.pending && target === next}
-            disabled={change.pending}
-            onClick={() => next === "cancelled" ? (setCancelIsUndo(false), setCancelStep(1)) : void change.run({ next })}
-            className={next === "cancelled" || next === "refunded" ? "text-danger" : undefined}
-          >
-            {ORDER_STATUS_LABELS[next as AnyOrderStatus] ?? next}
-          </Button>
-        ))}
-      </div>
-
-      {allowedStatuses.length === 0 && !showUndo && (
-        <Alert tone="info">این سفارش در وضعیت «{ORDER_STATUS_LABELS[status]}» است و وضعیت قبلی قابل بازیابی ندارد.</Alert>
-      )}
-
-      {change.error && <Alert tone="danger" role="alert" className="mt-3">{change.error}</Alert>}
-
-      <p className="mt-3 text-xs text-fg-subtle">
-        لغو سفارشی که موجودی آن کسر شده، کالاها را به انبار بازمی‌گرداند. لغو پرداخت، بازپرداخت خودکار بانکی نیست.
+    <div className="mt-5 border-t border-border pt-5">
+      <p className="mb-4 text-xs leading-6 text-fg-muted">
+        برای تغییر وضعیت سفارش روی دایره مرحله موردنظر کلیک کنید. تغییرات در تاریخچه ثبت می‌شوند.
       </p>
-
-      <Modal
-        open={undoOpen}
-        onClose={() => { if (!change.pending) setUndoOpen(false); }}
-        title="بازگشت به وضعیت قبلی سفارش"
-        description={`سفارش ${orderNumber}`}
-        size="sm"
-        footer={
-          <div className="flex justify-end gap-2">
-            <Button type="button" variant="ghost" size="sm" disabled={change.pending} onClick={() => setUndoOpen(false)}>انصراف</Button>
-            <Button
-              type="button" variant="secondary" size="sm"
-              disabled={change.pending || !previousStatus || requiresCancellationConfirmation}
-              loading={change.pending && target === previousStatus}
-              onClick={() => { if (previousStatus) void change.run({ next: previousStatus, undo: true }); }}
-              icon={<Undo2 className="size-4" aria-hidden />}
-            >
-              تأیید بازگشت وضعیت
-            </Button>
-          </div>
-        }
-      >
-        <div className="space-y-3 text-sm leading-7 text-fg">
-          <p>وضعیت سفارش از «{ORDER_STATUS_LABELS[status]}» به «{previousStatus ? ORDER_STATUS_LABELS[previousStatus] : "وضعیت قبلی"}» برمی‌گردد.</p>
-          {requiresCancellationConfirmation && (
-            <Alert tone="warning">بازگشت به «لغو شده» نیاز به تأیید دومرحله‌ای دارد. از بخش تغییر وضعیت، دکمه «لغو شده» را انتخاب کنید.</Alert>
-          )}
-          {(status === "cancelled" || status === "returned") && (
-            <Alert tone="warning">در صورت برگشت به مرحله فعال، موجودی کالا مجدداً از انبار کم می‌شود؛ اگر موجودی کافی نباشد عملیات انجام نمی‌شود.</Alert>
-          )}
-          {hasRefundWarning && (
-            <Alert tone="warning">برگشت وضعیت، استرداد انجام‌شده را باطل نمی‌کند و وضعیت واقعی پرداخت تغییر نخواهد کرد.</Alert>
-          )}
-          {(status === "shipped" || status === "delivered") && (
-            <p className="text-xs text-fg-muted">اطلاعات کد رهگیری حفظ می‌شود، اما تاریخ‌های ارسال و تحویل متناسب با وضعیت به‌روزرسانی می‌شوند.</p>
-          )}
-          {change.error && <Alert tone="danger" role="alert">{change.error}</Alert>}
-        </div>
-      </Modal>
-
+      <ol className="grid grid-cols-5 gap-1 sm:gap-2" aria-label="تغییر مرحله سفارش">
+        {ORDER_STATUS_FLOW.map((step, index) => {
+          const Icon = STATUS_ICONS[index];
+          const active = index === currentIndex;
+          const reached = index <= currentIndex;
+          const enabled = !change.pending && !active && canSetStage && index > 0;
+          return (
+            <li key={step} className="relative min-w-0 text-center">
+              <button type="button"
+                aria-label={`تغییر وضعیت به ${ORDER_STATUS_LABELS[step]}`}
+                aria-current={active ? "step" : undefined}
+                disabled={!enabled}
+                onClick={() => { void change.run(step); }}
+                className={`mx-auto grid size-9 place-items-center rounded-full border-2 transition-colors sm:size-11 ${
+                  active ? "border-primary bg-primary text-primary-fg" :
+                  reached ? "border-primary text-primary" : "border-border text-fg-subtle"
+                } ${enabled ? "cursor-pointer hover:bg-primary-soft hover:text-primary-soft-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" : "cursor-default"}`}
+              >
+                <Icon className="size-4 sm:size-5" aria-hidden />
+              </button>
+              <span className={`mt-2 block text-[0.65rem] leading-5 sm:text-xs ${active ? "font-semibold text-fg" : "text-fg-muted"}`}>
+                {ORDER_STATUS_LABELS[step]}
+              </span>
+              {change.pending && target === step && <span className="mt-1 block text-[10px] text-fg-muted">در حال ثبت…</span>}
+            </li>
+          );
+        })}
+      </ol>
+      {!canSetStage && (
+        <Alert tone="info" className="mt-4">
+          مرحله‌های عملیاتی فقط برای سفارش‌های پرداخت‌شده قابل تغییر هستند؛ وضعیت پرداخت از طریق این نمودار تغییر نمی‌کند.
+        </Alert>
+      )}
+      {change.error && <Alert tone="danger" className="mt-4" role="alert">{change.error}</Alert>}
+      <div className="mt-5 border-t border-border pt-4">
+        {canCancel && (
+          <Button type="button" size="sm" variant="danger" disabled={change.pending}
+            onClick={() => setCancelStep(1)} icon={<ShieldAlert className="size-4" aria-hidden />}>
+            لغو سفارش
+          </Button>
+        )}
+        <p className="mt-2 text-xs text-fg-subtle">
+          لغو سفارش مستقل از مراحل بالاست و تنها با تأیید دومرحله‌ای انجام می‌شود. لغو، بازپرداخت خودکار بانکی نیست.
+        </p>
+      </div>
       <Modal
         open={cancelStep !== 0}
         onClose={closeCancel}
         title={cancelStep === 1 ? "تأیید مرحله اول لغو سفارش" : "تأیید نهایی لغو سفارش"}
         description={`شماره سفارش: ${orderNumber}`}
         size="sm"
-        footer={
-          <div className="flex flex-wrap justify-end gap-2">
-            <Button type="button" size="sm" variant="ghost" disabled={change.pending} onClick={closeCancel}>انصراف</Button>
-            {cancelStep === 1 ? (
-              <Button type="button" size="sm" variant="secondary" onClick={() => setCancelStep(2)}>
-                ادامه به مرحله دوم
-              </Button>
-            ) : (
-              <Button
-                type="button"
-                size="sm"
-                variant="danger"
-                loading={change.pending && target === "cancelled"}
-                disabled={change.pending || !cancelAcknowledged}
-                onClick={() => void change.run({ next: "cancelled", undo: cancelIsUndo })}
-              >
-                تأیید نهایی و لغو سفارش
-              </Button>
-            )}
-          </div>
-        }
+        footer={<div className="flex flex-wrap justify-end gap-2">
+          <Button type="button" size="sm" variant="ghost" disabled={change.pending} onClick={closeCancel}>انصراف</Button>
+          {cancelStep === 1 ? (
+            <Button type="button" size="sm" variant="secondary" onClick={() => setCancelStep(2)}>ادامه به مرحله دوم</Button>
+          ) : (
+            <Button type="button" size="sm" variant="danger"
+              loading={change.pending && target === "cancelled"}
+              disabled={change.pending || !cancelAcknowledged}
+              onClick={() => void change.run("cancelled")}>
+              تأیید نهایی و لغو سفارش
+            </Button>
+          )}
+        </div>}
       >
         <div className="space-y-3 text-sm leading-7 text-fg">
           <div className="flex gap-2 rounded-md bg-danger-soft p-3 text-danger">
             <ShieldAlert className="mt-1 size-5 shrink-0" aria-hidden />
-            <p>با لغو سفارش، ادامه آماده‌سازی یا ارسال آن متوقف می‌شود. اگر موجودی کالا قبلاً کسر شده، به انبار بازمی‌گردد.</p>
+            <p>لغو سفارش، آماده‌سازی آن را متوقف می‌کند و اگر موجودی کسر شده باشد به انبار بازمی‌گردد.</p>
           </div>
           {cancelStep === 1 ? (
-            <p>برای جلوگیری از لغو تصادفی، در مرحله بعد باید اثر این اقدام را جداگانه تأیید کنید.</p>
+            <p>برای جلوگیری از لغو تصادفی، اثر این اقدام را در مرحله بعد جداگانه تأیید کنید.</p>
           ) : (
-            <Checkbox
-              label="تأیید می‌کنم که قصد لغو همین سفارش را دارم و اثر آن روی موجودی را می‌دانم."
-              checked={cancelAcknowledged}
-              disabled={change.pending}
-              onChange={(e) => setCancelAcknowledged(e.target.checked)}
-            />
+            <Checkbox label="تأیید می‌کنم که قصد لغو همین سفارش را دارم و از اثر آن بر موجودی اطلاع دارم."
+              checked={cancelAcknowledged} disabled={change.pending}
+              onChange={(e) => setCancelAcknowledged(e.target.checked)} />
           )}
           {change.error && <Alert tone="danger" role="alert">{change.error}</Alert>}
         </div>

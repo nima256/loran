@@ -19,12 +19,12 @@ export const SORT_OPTIONS: { value: SortKey; label: string }[] = [
 ];
 
 export const POPULAR_SEARCHES = [
-  "کتانی مردانه",
+  "کتونی مردانه",
   "اسنیکر سفید",
   "نیم‌بوت زنانه",
   "کفش رانینگ",
   "کفش کلاسیک چرم",
-  "کتانی بچگانه",
+  "کتونی بچگانه",
 ];
 
 /**

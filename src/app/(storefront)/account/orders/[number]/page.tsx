@@ -322,11 +322,10 @@ export default function OrderDetailPage({ params }: { params: Promise<{ number: 
                 تعویض کالا
               </h2>
               <p className="mt-2 text-sm leading-7 text-fg-muted">
-                تا {EXCHANGE_WINDOW_LABEL} پس از تحویل می‌توانید درخواست تعویض سایز، رنگ یا مدل ثبت
-                کنید. امکان مرجوع کردن و بازگشت وجه وجود ندارد.
+                تا {EXCHANGE_WINDOW_LABEL} پس از تحویل می‌توانید برای هماهنگی تعویض با پشتیبانی تماس بگیرید.
               </p>
-              <ButtonLink href={`/account/exchanges?order=${order.number}`} variant="secondary" size="sm" className="mt-4">
-                ثبت درخواست تعویض
+              <ButtonLink href="/exchange" variant="secondary" size="sm" className="mt-4">
+                ارتباط با پشتیبانی برای تعویض
               </ButtonLink>
             </Card>
           )}

@@ -1,8 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import { Instagram, MapPin, Phone } from "lucide-react";
 import { Logo } from "./Logo";
 import { NewsletterForm } from "./Newsletter";
 import { footerNav } from "@/lib/navigation";
+import { useCatalog } from "@/store/CatalogProvider";
 import { siteConfig } from "@/lib/site-config";
 import { toPersianDigits } from "@/lib/format";
 
@@ -22,6 +25,17 @@ function TelegramIcon({ className }: { className?: string }) {
 
 export function Footer() {
   const year = new Intl.DateTimeFormat("fa-IR", { year: "numeric" }).format(new Date());
+  const { categoryLinks } = useCatalog();
+  // These links use the same database-backed category tree as the main header.
+  const categoryItems = categoryLinks.flatMap((item) => [item, ...item.children]);
+  const columns = footerNav.map((column) => column.title !== "خرید" ? column : {
+    ...column,
+    links: [
+      { label: "همه محصولات", href: "/shop" },
+      ...categoryItems.map((item) => ({ label: item.label, href: item.href })),
+      { label: "تخفیف‌ها و حراج", href: "/sale" },
+    ],
+  });
 
   return (
     <footer className="no-print mt-8 border-t border-border bg-surface-3 dark:bg-surface">
@@ -38,7 +52,7 @@ export function Footer() {
 
           {/* Link columns */}
           <div className="grid gap-8 sm:grid-cols-3">
-            {footerNav.map((column) => (
+            {columns.map((column) => (
               <nav key={column.title} aria-label={column.title}>
                 <h3 className="text-sm font-bold text-fg">{column.title}</h3>
                 <ul className="mt-3 space-y-1">

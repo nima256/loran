@@ -13,10 +13,9 @@ import {
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { PriceInline } from "@/components/ui/Price";
-import { OrderStatusBadge, OrderTimeline } from "@/components/account/OrderStatus";
+import { OrderStatusBadge } from "@/components/account/OrderStatus";
 import { OrderSummary } from "@/components/cart/OrderSummary";
 import { getAdminOrder } from "@/server/services/order-queries";
-import { allowedTransitions, previousOrderStatus } from "@/server/services/order-status";
 import { listTrackingCarriers } from "@/server/services/shipping";
 import { prisma } from "@/server/lib/prisma";
 import { PAYMENT_METHOD_LABELS } from "@/lib/orders";
@@ -53,9 +52,6 @@ export default async function AdminOrderDetailPage({
       .findUnique({ where: { id: order.id }, select: { customerId: true } })
       .then((row) => row?.customerId ?? null),
   ]);
-
-  const allowed = allowedTransitions(order.status);
-  const previousStatus = previousOrderStatus(order.status, order.timeline.map((event) => ({ status: event.status, isUndo: event.isUndo })));
 
   return (
     <>
@@ -96,14 +92,10 @@ export default async function AdminOrderDetailPage({
               <OrderStatusBadge status={order.status} />
             </div>
 
-            <OrderTimeline status={order.status} timeline={order.timeline} />
-
             <OrderStatusActions
               orderId={order.id}
               orderNumber={order.number}
               status={order.status}
-              allowedStatuses={allowed}
-              previousStatus={previousStatus}
               paymentStatus={order.paymentStatus}
             />
           </Card>

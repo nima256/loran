@@ -5,6 +5,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { ClearPaidCart } from "@/components/cart/ClearPaidCart";
 import { Alert } from "@/components/ui/Feedback";
 import { siteConfig } from "@/lib/site-config";
+import { prisma } from "@/server/lib/prisma";
 import { toPersianDigits } from "@/lib/format";
 
 export const metadata: Metadata = { title: "پرداخت موفق", robots: { index: false } };
@@ -13,6 +14,11 @@ export default async function PaymentSuccessPage({
   searchParams,
 }: { searchParams: Promise<{ order?: string; ref?: string }> }) {
   const { order = "LRN-000000-0000", ref = "۷۳۴۵۹۲۱۸" } = await searchParams;
+  const paidOrder = await prisma.order.findFirst({
+    where: { number: order, paymentStatus: "paid", deletedAt: null },
+    select: { shippingMethodCode: true, shippingPaidOnDelivery: true },
+  });
+  const tipaxPostpaid = paidOrder?.shippingMethodCode === "tipax" && paidOrder.shippingPaidOnDelivery;
 
   return (
     <div className="container-narrow py-12">
@@ -37,9 +43,11 @@ export default async function PaymentSuccessPage({
           </div>
         </dl>
 
-        <Alert tone="warning" className="mt-6 text-start" title="کرایه ارسال هنگام تحویل">
-          {siteConfig.commerce.shippingNoticeShort} مبلغی که پرداخت کردید فقط بابت کالاهای سفارش بود.
-        </Alert>
+        {tipaxPostpaid && (
+          <Alert tone="warning" className="mt-6 text-start" title="کرایه ارسال هنگام تحویل">
+            {siteConfig.commerce.shippingNoticeShort} مبلغی که پرداخت کردید فقط بابت کالاهای سفارش بود.
+          </Alert>
+        )}
 
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
           <ButtonLink href="/account/orders" icon={<Package className="size-4" aria-hidden />}>

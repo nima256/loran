@@ -135,10 +135,6 @@ export default function ContactPage() {
                 </div>
               </li>
             </ul>
-
-            <Alert tone="info" className="mt-5">
-              اطلاعات تماس بالا موقت است و پیش از انتشار نهایی سایت با مقادیر رسمی جایگزین می‌شود.
-            </Alert>
           </Card>
         </div>
 

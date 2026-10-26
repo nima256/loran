@@ -302,7 +302,7 @@ export default function CheckoutPage() {
                   <Alert tone="success" className="mt-4" title="ارسال این سفارش رایگان است">
                     مبلغ سفارش از سقف ارسال رایگان بیشتر است؛ کرایه ارسال را لوران پرداخت می‌کند.
                   </Alert>
-                ) : method?.paidOnDelivery && (
+                ) : method?.id === "tipax" && method.paidOnDelivery && (
                   <Alert tone="warning" className="mt-4" title="هزینه ارسال جداگانه دریافت می‌شود">
                     مبلغی که الان آنلاین پرداخت می‌کنید فقط بابت کالاهاست. کرایه تیپاکس را هنگام
                     تحویل مرسوله، مستقیماً به مأمور تیپاکس می‌پردازید.
@@ -323,28 +323,6 @@ export default function CheckoutPage() {
                     onChange={(v) => setPayment(v)}
                     title="پرداخت اینترنتی"
                     description="انتقال به درگاه بانکی و پرداخت با کارت‌های عضو شتاب."
-                  />
-                  {/* Reserved slots for the two BNPL providers. Deliberately inert:
-                      there is no integration, so the UI must not imply one. */}
-                  <RadioCard
-                    name="payment"
-                    value="snapppay"
-                    checked={false}
-                    disabled
-                    onChange={() => {}}
-                    badge={<Badge tone="neutral" size="sm">به‌زودی</Badge>}
-                    title="اسنپ‌پی — خرید اعتباری"
-                    description="پرداخت قسطی از طریق اعتبار اسنپ‌پی. این روش هنوز فعال نشده است."
-                  />
-                  <RadioCard
-                    name="payment"
-                    value="torobpay"
-                    checked={false}
-                    disabled
-                    onChange={() => {}}
-                    badge={<Badge tone="neutral" size="sm">به‌زودی</Badge>}
-                    title="ترب‌پی — خرید اعتباری"
-                    description="پرداخت اعتباری از طریق ترب‌پی. این روش هنوز فعال نشده است."
                   />
                 </div>
               </section>

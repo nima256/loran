@@ -56,14 +56,8 @@ export function categoryNav(categories: Category[]): CategoryNavItem[] {
 export const footerNav = [
   {
     title: "خرید",
-    links: [
-      { label: "همه محصولات", href: "/shop" },
-      { label: "کتانی و اسنیکر", href: "/category/sneaker" },
-      { label: "ورزشی و رانینگ", href: "/category/running" },
-      { label: "رسمی و کلاسیک", href: "/category/classic" },
-      { label: "بوت و نیم‌بوت", href: "/category/boots" },
-      { label: "تخفیف‌ها و حراج", href: "/sale" },
-    ],
+    // Footer.tsx injects real categories from CatalogProvider.
+    links: [{ label: "همه محصولات", href: "/shop" }, { label: "تخفیف‌ها و حراج", href: "/sale" }],
   },
   {
     title: "خدمات مشتریان",
@@ -92,7 +86,6 @@ export const footerNav = [
 export const accountNav = [
   { label: "پیشخوان", href: "/account", icon: "dashboard", exact: true },
   { label: "سفارش‌ها", href: "/account/orders", icon: "orders" },
-  { label: "درخواست‌های تعویض", href: "/account/exchanges", icon: "returns" },
   { label: "آدرس‌ها", href: "/account/addresses", icon: "addresses" },
   { label: "دیدگاه‌های من", href: "/account/reviews", icon: "reviews" },
   { label: "اطلاعات حساب", href: "/account/profile", icon: "profile" },

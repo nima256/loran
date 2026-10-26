@@ -28,7 +28,7 @@ export function HangingShoe({
       viewBox="0 0 560 780"
       className={className}
       role="img"
-      aria-label="کتانی لوران که از بند کفش آویزان است"
+      aria-label="کتونی لوران که از بند کفش آویزان است"
     >
       <defs>
         <linearGradient id="hero-body" x1="0" y1="0" x2="1" y2="1">

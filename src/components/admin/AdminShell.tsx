@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import {
   BarChart3, Boxes, ExternalLink, LayoutDashboard, LogOut, Menu, MessageSquare, Package,
-  Layers, RotateCcw, Settings, ShoppingCart, Palette, Star, Tags, TicketPercent, Users, X,
+  Layers, Settings, ShoppingCart, Palette, Star, Tags, TicketPercent, Users, X,
 } from "lucide-react";
 import { Logo } from "@/components/layout/Logo";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
@@ -23,7 +23,6 @@ const NAV = [
   { label: "تخفیف و کمپین", href: "/admin/discounts", icon: TicketPercent },
   { label: "مشتریان", href: "/admin/customers", icon: Users },
   { label: "دیدگاه‌ها", href: "/admin/reviews", icon: Star },
-  { label: "درخواست‌های تعویض", href: "/admin/returns", icon: RotateCcw },
   { label: "درخواست‌ها", href: "/admin/requests", icon: MessageSquare },
   { label: "گزارش‌ها", href: "/admin/reports", icon: BarChart3 },
   { label: "تنظیمات", href: "/admin/settings", icon: Settings },
