@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000" role="img">
+<defs>
+<radialGradient id="pad-hightop-skyblue-pair" cx="50%" cy="46%" r="62%">
+<stop offset="0%" stop-color="#fbf5ee"/>
+<stop offset="100%" stop-color="#e7e1da"/>
+</radialGradient>
+<radialGradient id="sh-hightop-skyblue-pair" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#CFC3B5" stop-opacity="0.55"/>
+<stop offset="100%" stop-color="#CFC3B5" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="1000" height="1000" fill="url(#pad-hightop-skyblue-pair)"/>
+<ellipse cx="500" cy="826" rx="382" ry="38" fill="url(#sh-hightop-skyblue-pair)"/>
+<g opacity="0.5" transform="translate(500 560) scale(0.8) translate(-500 -560) translate(96,-150)">
+<g>
+<path d="M110 700 C104 638 150 590 232 556 C316 520 386 484 444 442 C494 406 528 368 548 322
+C562 290 592 274 638 274 C700 274 736 296 744 344 C754 404 762 456 774 492
+C790 540 824 570 866 588 L890 598 L890 700 Z" fill="#7BADD2"/>
+<path d="M110 700 C104 638 150 590 232 556 C316 520 386 484 444 442 L468 478
+C402 524 326 562 242 594 C186 616 152 654 148 700 Z" fill="#6395ba" opacity="0.45"/>
+<path d="M110 700 C104 638 150 590 232 556 L282 624 C220 650 176 670 158 700 Z" fill="#8fc1e6"/>
+<!-- ankle collar -->
+<path d="M548 322 C562 290 592 274 638 274 C700 274 736 296 744 344 L716 352
+C708 318 682 304 640 304 C604 304 584 316 576 340 Z" fill="#99cbf0"/>
+<!-- heel panel -->
+<path d="M774 492 C790 540 824 570 866 588 L890 598 L890 700 L806 700 C800 630 786 558 762 500 Z"
+fill="#4A80A8"/>
+<!-- side stripe -->
+<path d="M320 620 C408 600 490 562 560 516 L590 496 L610 548 L578 570
+C506 616 424 652 336 670 Z" fill="#4A80A8" opacity="0.9"/>
+<g stroke="#E9F1F7" stroke-width="11" stroke-linecap="round" fill="none">
+<path d="M524 400 L592 378"/><path d="M542 448 L610 428"/>
+<path d="M560 496 L626 478"/><path d="M580 542 L642 526"/>
+</g>
+<g fill="#417398" opacity="0.7">
+<circle cx="522" cy="402" r="6"/><circle cx="594" cy="376" r="6"/>
+<circle cx="540" cy="450" r="6"/><circle cx="612" cy="426" r="6"/>
+<circle cx="558" cy="498" r="6"/><circle cx="628" cy="476" r="6"/>
+</g>
+<path d="M96 700 C96 678 118 668 150 668 L866 668 C898 668 914 680 914 702 L914 726 L96 726 Z" fill="#FFFFFF"/>
+<path d="M96 726 L914 726 L914 744 C914 762 898 772 866 772 L144 772 C112 772 96 762 96 744 Z"
+fill="#dddddd"/>
+</g>
+</g>
+<g transform="translate(500 560) scale(0.9) translate(-500 -560) translate(-52,20)">
+<g>
+<path d="M110 700 C104 638 150 590 232 556 C316 520 386 484 444 442 C494 406 528 368 548 322
+C562 290 592 274 638 274 C700 274 736 296 744 344 C754 404 762 456 774 492
+C790 540 824 570 866 588 L890 598 L890 700 Z" fill="#7BADD2"/>
+<path d="M110 700 C104 638 150 590 232 556 C316 520 386 484 444 442 L468 478
+C402 524 326 562 242 594 C186 616 152 654 148 700 Z" fill="#6395ba" opacity="0.45"/>
+<path d="M110 700 C104 638 150 590 232 556 L282 624 C220 650 176 670 158 700 Z" fill="#8fc1e6"/>
+<!-- ankle collar -->
+<path d="M548 322 C562 290 592 274 638 274 C700 274 736 296 744 344 L716 352
+C708 318 682 304 640 304 C604 304 584 316 576 340 Z" fill="#99cbf0"/>
+<!-- heel panel -->
+<path d="M774 492 C790 540 824 570 866 588 L890 598 L890 700 L806 700 C800 630 786 558 762 500 Z"
+fill="#4A80A8"/>
+<!-- side stripe -->
+<path d="M320 620 C408 600 490 562 560 516 L590 496 L610 548 L578 570
+C506 616 424 652 336 670 Z" fill="#4A80A8" opacity="0.9"/>
+<g stroke="#E9F1F7" stroke-width="11" stroke-linecap="round" fill="none">
+<path d="M524 400 L592 378"/><path d="M542 448 L610 428"/>
+<path d="M560 496 L626 478"/><path d="M580 542 L642 526"/>
+</g>
+<g fill="#417398" opacity="0.7">
+<circle cx="522" cy="402" r="6"/><circle cx="594" cy="376" r="6"/>
+<circle cx="540" cy="450" r="6"/><circle cx="612" cy="426" r="6"/>
+<circle cx="558" cy="498" r="6"/><circle cx="628" cy="476" r="6"/>
+</g>
+<path d="M96 700 C96 678 118 668 150 668 L866 668 C898 668 914 680 914 702 L914 726 L96 726 Z" fill="#FFFFFF"/>
+<path d="M96 726 L914 726 L914 744 C914 762 898 772 866 772 L144 772 C112 772 96 762 96 744 Z"
+fill="#dddddd"/>
+</g>
+</g>
+</svg>

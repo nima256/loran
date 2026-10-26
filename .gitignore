@@ -1,0 +1,17 @@
+node_modules
+.next
+.claude
+out
+build
+.DS_Store
+*.pem
+npm-debug.log*
+.env*
+!.env.example
+next-env.d.ts
+.vercel
+tsconfig.tsbuildinfo
+
+# Uploaded product media — persisted on a volume, never committed.
+/public/uploads/*
+!/public/uploads/.gitkeep

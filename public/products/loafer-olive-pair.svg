@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000" role="img">
+<defs>
+<radialGradient id="pad-loafer-olive-pair" cx="50%" cy="46%" r="62%">
+<stop offset="0%" stop-color="#fbf5ee"/>
+<stop offset="100%" stop-color="#e7e1da"/>
+</radialGradient>
+<radialGradient id="sh-loafer-olive-pair" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#CFC3B5" stop-opacity="0.55"/>
+<stop offset="100%" stop-color="#CFC3B5" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="1000" height="1000" fill="url(#pad-loafer-olive-pair)"/>
+<ellipse cx="500" cy="826" rx="382" ry="38" fill="url(#sh-loafer-olive-pair)"/>
+<g opacity="0.5" transform="translate(500 560) scale(0.8) translate(-500 -560) translate(96,-150)">
+<g>
+<path d="M114 702 C108 646 154 606 234 578 C318 548 388 516 446 480 C492 452 534 430 572 424
+C618 442 664 462 706 452 C760 440 800 470 830 540 C862 610 884 662 890 702 Z"
+fill="#5A6640"/>
+<path d="M114 702 C108 646 154 606 234 578 C318 548 388 516 446 480 L468 514
+C402 558 328 592 246 618 C190 636 156 668 152 702 Z" fill="#404c26" opacity="0.45"/>
+<path d="M114 702 C108 646 154 606 234 578 L280 646 C222 670 174 684 154 702 Z" fill="#6c7852"/>
+<path d="M706 452 C760 440 800 470 830 540 C862 610 884 662 890 702 L818 702
+C810 630 788 552 748 496 Z"
+fill="#424C2E"/>
+<!-- saddle strap -->
+<path d="M498 486 C556 508 626 518 692 512 L698 556 C624 562 548 550 482 524 Z" fill="#78845e"/>
+<rect x="566" y="506" width="66" height="17" rx="8" fill="#1e280a" opacity="0.7"/>
+<!-- opening line -->
+<path d="M470 508 C528 474 586 448 646 440" stroke="#2c3812" stroke-width="5"
+fill="none" opacity="0.45"/>
+<path d="M94 702 C94 680 116 670 150 670 L868 670 C900 670 916 682 916 704 L916 726 L94 726 Z" fill="#E9E5D8"/>
+<path d="M94 726 L916 726 L916 746 C916 764 900 774 868 774 L142 774 C110 774 94 764 94 746 Z"
+fill="#c7c3b6"/>
+</g>
+</g>
+<g transform="translate(500 560) scale(0.9) translate(-500 -560) translate(-52,20)">
+<g>
+<path d="M114 702 C108 646 154 606 234 578 C318 548 388 516 446 480 C492 452 534 430 572 424
+C618 442 664 462 706 452 C760 440 800 470 830 540 C862 610 884 662 890 702 Z"
+fill="#5A6640"/>
+<path d="M114 702 C108 646 154 606 234 578 C318 548 388 516 446 480 L468 514
+C402 558 328 592 246 618 C190 636 156 668 152 702 Z" fill="#404c26" opacity="0.45"/>
+<path d="M114 702 C108 646 154 606 234 578 L280 646 C222 670 174 684 154 702 Z" fill="#6c7852"/>
+<path d="M706 452 C760 440 800 470 830 540 C862 610 884 662 890 702 L818 702
+C810 630 788 552 748 496 Z"
+fill="#424C2E"/>
+<!-- saddle strap -->
+<path d="M498 486 C556 508 626 518 692 512 L698 556 C624 562 548 550 482 524 Z" fill="#78845e"/>
+<rect x="566" y="506" width="66" height="17" rx="8" fill="#1e280a" opacity="0.7"/>
+<!-- opening line -->
+<path d="M470 508 C528 474 586 448 646 440" stroke="#2c3812" stroke-width="5"
+fill="none" opacity="0.45"/>
+<path d="M94 702 C94 680 116 670 150 670 L868 670 C900 670 916 682 916 704 L916 726 L94 726 Z" fill="#E9E5D8"/>
+<path d="M94 726 L916 726 L916 746 C916 764 900 774 868 774 L142 774 C110 774 94 764 94 746 Z"
+fill="#c7c3b6"/>
+</g>
+</g>
+</svg>

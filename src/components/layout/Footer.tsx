@@ -1,0 +1,146 @@
+import Link from "next/link";
+import { Instagram, MapPin, Phone } from "lucide-react";
+import { Logo } from "./Logo";
+import { NewsletterForm } from "./Newsletter";
+import { footerNav } from "@/lib/navigation";
+import { siteConfig } from "@/lib/site-config";
+import { toPersianDigits } from "@/lib/format";
+
+const SOCIAL_ICONS: Record<string, typeof Instagram> = {
+  instagram: Instagram,
+  instagram2: Instagram,
+};
+
+/** Brand-accurate Telegram paper plane; no third-party icon package. */
+function TelegramIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+      <path d="M22.24 2.77c.4-.16.83.16.74.6l-3.7 17.49c-.08.38-.52.54-.82.31l-5.65-4.16-2.88 2.78c-.26.25-.7.06-.7-.3v-3.85l10.2-9.2c.2-.18-.04-.46-.26-.31L6.55 14.18l-5.12-1.62c-.47-.15-.49-.8-.02-.99L22.24 2.77z" />
+    </svg>
+  );
+}
+
+export function Footer() {
+  const year = new Intl.DateTimeFormat("fa-IR", { year: "numeric" }).format(new Date());
+
+  return (
+    <footer className="no-print mt-8 border-t border-border bg-surface-3 dark:bg-surface">
+      <div className="container-page py-10 sm:py-12">
+        <div className="grid gap-10 lg:grid-cols-[1.2fr_2fr]">
+          {/* Brand + newsletter */}
+          <div className="max-w-md">
+            <Logo size="md" />
+            <p className="mt-4 text-sm leading-7 text-fg-muted">
+              لوران، فروشگاه کفش در یزد. از فروش حضوری در پاساژ ستاره شروع کردیم و حالا به سراسر ایران ارسال می‌کنیم.
+            </p>
+            <NewsletterForm className="mt-6" />
+          </div>
+
+          {/* Link columns */}
+          <div className="grid gap-8 sm:grid-cols-3">
+            {footerNav.map((column) => (
+              <nav key={column.title} aria-label={column.title}>
+                <h3 className="text-sm font-bold text-fg">{column.title}</h3>
+                <ul className="mt-3 space-y-1">
+                  {column.links.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="inline-flex min-h-9 items-center text-sm text-fg-muted transition-colors hover:text-primary dark:hover:text-[color:var(--primary-soft-fg)]"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            ))}
+          </div>
+        </div>
+
+        {/* Contact strip — every value here comes from site-config.ts */}
+        <div className="mt-10 grid gap-4 border-t border-border pt-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="flex items-start gap-3">
+            <Phone className="mt-0.5 size-4 shrink-0 text-fg-subtle" aria-hidden />
+            <div>
+              <p className="text-sm font-medium text-fg">پشتیبانی</p>
+              <a href={`tel:${siteConfig.contact.supportPhoneRaw}`} className="tnum inline-flex min-h-8 items-center text-sm text-fg-muted hover:text-fg" dir="ltr">
+                {siteConfig.contact.supportPhone}
+              </a>
+              <p className="text-xs text-fg-subtle">{siteConfig.contact.workingHours}</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <MapPin className="mt-0.5 size-4 shrink-0 text-fg-subtle" aria-hidden />
+            <div>
+              <p className="text-sm font-medium text-fg">فروشگاه حضوری</p>
+              <p className="text-sm leading-6 text-fg-muted">{siteConfig.stores[0].address}</p>
+              <Link href="/contact#stores" className="inline-flex min-h-8 items-center text-xs text-primary hover:underline dark:text-[color:var(--primary-soft-fg)]">
+                دیدن همه شعبه‌ها روی نقشه
+              </Link>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <Instagram className="mt-0.5 size-4 shrink-0 text-fg-subtle" aria-hidden />
+            <div>
+              <p className="text-sm font-medium text-fg">ما را دنبال کنید</p>
+              <div className="mt-1 flex flex-wrap gap-2">
+                {siteConfig.social
+                  .filter((social) => social.url.length > 0)
+                  .map((social) => {
+                    const Icon = social.id === "telegram" ? TelegramIcon : SOCIAL_ICONS[social.id] ?? Instagram;
+                    return (
+                      <a
+                        key={social.id}
+                        href={social.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${social.label} لوران ${social.handle}`}
+                        className="grid size-10 place-items-center rounded-md border border-border bg-surface text-fg-muted transition-colors hover:border-primary hover:text-primary dark:hover:text-[color:var(--primary-soft-fg)]"
+                      >
+                        <Icon className="size-4" aria-hidden />
+                      </a>
+                    );
+                  })}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8 flex flex-col-reverse items-center justify-between gap-4 border-t border-border pt-6 sm:flex-row">
+          <p className="text-center text-xs leading-6 text-fg-subtle sm:text-start">
+            © {toPersianDigits(year)} {siteConfig.legalName}. تمام حقوق محفوظ است.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+            <Link href="/terms" className="inline-flex min-h-8 items-center text-xs text-fg-muted hover:text-fg">قوانین و مقررات</Link>
+            <Link href="/privacy" className="inline-flex min-h-8 items-center text-xs text-fg-muted hover:text-fg">حریم خصوصی</Link>
+            {/* eNamad trust seal, exactly as issued (id + code). It must load
+                from trustseal.enamad.ir with referrerPolicy="origin": eNamad
+                checks the referring domain, so it is a plain <img>, never
+                proxied through next/image. */}
+            <a
+              referrerPolicy="origin"
+              target="_blank"
+              rel="noopener"
+              href="https://trustseal.enamad.ir/?id=8201019&Code=4Z9H69JKPxdQQnwnhDWSNBQn00PZqOLW"
+              aria-label="نماد اعتماد الکترونیکی (اینماد)"
+              className="inline-flex rounded-md border border-border bg-white p-1"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                referrerPolicy="origin"
+                src="https://trustseal.enamad.ir/logo.aspx?id=8201019&Code=4Z9H69JKPxdQQnwnhDWSNBQn00PZqOLW"
+                alt="نماد اعتماد الکترونیکی"
+                width={80}
+                height={80}
+                loading="lazy"
+                className="h-20 w-20 cursor-pointer object-contain"
+                {...{ code: "4Z9H69JKPxdQQnwnhDWSNBQn00PZqOLW" }}
+              />
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
